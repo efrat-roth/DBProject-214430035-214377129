@@ -2,7 +2,7 @@
 CREATE TABLE Category
 (
   CategoryID NUMBER(10) NOT NULL,
-  Name VARCHAR2(20) NOT NULL,
+  Name VARCHAR2(100) NOT NULL,
   EmergencyLevel NUMBER NOT NULL,
   PRIMARY KEY (CategoryID)
 );
@@ -11,7 +11,7 @@ CREATE TABLE Category
 CREATE TABLE Operator
 (
   OperatorID NUMBER(10) NOT NULL,
-  Name VARCHAR2(20) NOT NULL,
+  Name VARCHAR2(100) NOT NULL,
   ExpirationDate DATE NOT NULL,
   PRIMARY KEY (OperatorID)
 );
@@ -20,9 +20,9 @@ CREATE TABLE Operator
 CREATE TABLE Donor
 (
   DonorID NUMBER(10) NOT NULL,
-  Name VARCHAR2(20) NOT NULL,
+  Name VARCHAR2(100) NOT NULL,
   isActive CHAR(1) NOT NULL,
-  Designation VARCHAR2(20),
+  Designation VARCHAR2(100),
   PRIMARY KEY (DonorID)
 );
 
@@ -30,7 +30,7 @@ CREATE TABLE Donor
 CREATE TABLE Location
 (
   PhoneNumber NUMBER(10) NOT NULL,
-  Address VARCHAR2(20) NOT NULL,
+  Address VARCHAR2(100) NOT NULL,
   Instructions VARCHAR2(100),
   PRIMARY KEY (PhoneNumber)
 );
@@ -39,7 +39,7 @@ CREATE TABLE Location
 CREATE TABLE Item
 (
   ItemID NUMBER NOT NULL,
-  Name VARCHAR2(20) NOT NULL,
+  Name VARCHAR2(100) NOT NULL,
   Description VARCHAR2(100),
   Quantity NUMBER NOT NULL,
   Status NUMBER NOT NULL,
