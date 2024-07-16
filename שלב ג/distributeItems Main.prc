@@ -10,7 +10,7 @@ BEGIN
     DBMS_OUTPUT.PUT_LINE('Location capacity updated successfully.');
 
     -- Call the procedure to distribute items based on updated capacity
-    distribute_items();
+    distribute_items(218,300);
 
     DBMS_OUTPUT.PUT_LINE('Items distributed successfully.');
 
