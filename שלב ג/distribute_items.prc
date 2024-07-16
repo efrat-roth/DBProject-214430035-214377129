@@ -1,5 +1,5 @@
 --Distribute Donated Items to Locations
---This procedure distributes donated items to different locations based on their quantity and location capacity.
+--This procedure distributes items to different locations based on their quantity and location capacity.
 CREATE OR REPLACE PROCEDURE distribute_items 
 IS
     CURSOR item_cursor IS 
