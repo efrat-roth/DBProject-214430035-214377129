@@ -1,3 +1,124 @@
+prompt PL/SQL Developer Export Tables for user EFROTH@LABDBWIN
+prompt Created by efroth on יום חמישי 18 יולי 2024
+set feedback off
+set define off
+
+prompt Creating CATEGORY...
+create table CATEGORY
+(
+  categoryid     NUMBER(10) not null,
+  name           VARCHAR2(100) not null,
+  emergencylevel NUMBER not null
+)
+
+alter table CATEGORY
+  add primary key (CATEGORYID)
+  ;
+
+prompt Creating DONOR...
+create table DONOR
+(
+  donorid     NUMBER(10) not null,
+  name        VARCHAR2(100) not null,
+  isactive    CHAR(1) not null,
+  designation VARCHAR2(100) not null
+)
+
+alter table DONOR
+  add primary key (DONORID);
+
+prompt Creating LOCATION...
+create table LOCATION
+(
+  phonenumber  NUMBER(10) not null,
+  address      VARCHAR2(100) not null,
+  instructions VARCHAR2(100) not null,
+  capacity     INTEGER
+)
+
+alter table LOCATION
+  add primary key (PHONENUMBER) ;
+
+prompt Creating ITEM...
+create table ITEM
+(
+  itemid      NUMBER not null,
+  name        VARCHAR2(100) not null,
+  description VARCHAR2(100) not null,
+  quantity    NUMBER not null,
+  status      NUMBER not null,
+  categoryid  NUMBER not null,
+  phonenumber NUMBER(10) not null
+)
+
+alter table ITEM
+  add primary key (ITEMID);
+alter table ITEM
+  add foreign key (PHONENUMBER)
+  references LOCATION (PHONENUMBER);
+alter table ITEM
+  add constraint CK_ITEM_QUANTITY
+  check (Quantity >= 0);
+
+prompt Creating DONATION...
+create table DONATION
+(
+  donationid   NUMBER not null,
+  donationdate DATE not null,
+  itemid       NUMBER not null,
+  donorid      NUMBER not null
+)
+alter table DONATION
+  add primary key (DONATIONID)
+  ;
+alter table DONATION
+  add foreign key (ITEMID)
+  references ITEM (ITEMID);
+alter table DONATION
+  add foreign key (DONORID)
+  references DONOR (DONORID);
+
+prompt Creating MAINTENANCE...
+create table MAINTENANCE
+(
+  maintenanceid   NUMBER not null,
+  maintenancedate DATE not null,
+  description     VARCHAR2(100) not null,
+  itemid          NUMBER not null
+)
+alter table MAINTENANCE
+  add primary key (MAINTENANCEID)
+  ;
+alter table MAINTENANCE
+  add foreign key (ITEMID)
+  references ITEM (ITEMID);
+
+prompt Creating OPERATOR...
+create table OPERATOR
+(
+  operatorid     NUMBER(10) not null,
+  name           VARCHAR2(100) not null,
+  expirationdate DATE not null,
+  adress         VARCHAR2(100)
+)
+alter table OPERATOR
+  add primary key (OPERATORID);
+
+prompt Creating OPERATION...
+create table OPERATION
+(
+  itemid     NUMBER not null,
+  operatorid NUMBER not null
+)
+alter table OPERATION
+  add primary key (ITEMID, OPERATORID);
+alter table OPERATION
+  add foreign key (ITEMID)
+  references ITEM (ITEMID);
+alter table OPERATION
+  add foreign key (OPERATORID)
+  references OPERATOR (OPERATORID);
+
 prompt Disabling triggers for CATEGORY...
 alter table CATEGORY disable all triggers;
 prompt Disabling triggers for DONOR...
@@ -172,599 +293,599 @@ commit;
 prompt 37 records loaded
 prompt Loading LOCATION...
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999092, 'Shosanim 100, NY', 'permission from organization head', null);
+values (999999092, 'Shosanim 100, NY', 'permission from organization head', 812);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999095, '36 Josh Ave', 'permission from chief security officer', null);
+values (999999095, '36 Josh Ave', 'permission from chief security officer', 78);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999096, '965 Matarazzo Road', 'permission from organization head', null);
+values (999999096, '965 Matarazzo Road', 'permission from organization head', 564);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999097, '80 Howard Road', 'permission from chief security officer', null);
+values (999999097, '80 Howard Road', 'permission from chief security officer', 166);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999098, '89 Chalee Street', 'permission from organization head', null);
+values (999999098, '89 Chalee Street', 'permission from organization head', 448);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999099, '51 Heath Road', 'permission from organization head', null);
+values (999999099, '51 Heath Road', 'permission from organization head', 843);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999100, '75 Wetzlar', 'permission from manager', null);
+values (999999100, '75 Wetzlar', 'permission from manager', 322);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999101, '732 Cozier Road', 'permission from security', null);
+values (999999101, '732 Cozier Road', 'permission from security', 3096);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999102, '93 Sao roque Street', 'permission from security', null);
+values (999999102, '93 Sao roque Street', 'permission from security', 1882);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999103, '37 Lionel Ave', 'permission from manager', null);
+values (999999103, '37 Lionel Ave', 'permission from manager', 74);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999104, '60 Tambor Road', 'permission from manager', null);
+values (999999104, '60 Tambor Road', 'permission from manager', 832);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999106, '82 Van Helden Drive', 'permission from security', null);
+values (999999106, '82 Van Helden Drive', 'permission from security', 982);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999107, '4 Haggard Blvd', 'permission from security', null);
+values (999999107, '4 Haggard Blvd', 'permission from security', 471);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999108, '5 Porto alegre Road', 'permission from security', null);
+values (999999108, '5 Porto alegre Road', 'permission from security', 102);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999109, '30 Schaumburg Blvd', 'permission from security', null);
+values (999999109, '30 Schaumburg Blvd', 'permission from security', 1180);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999110, '851 Avalon Road', 'permission from security', null);
+values (999999110, '851 Avalon Road', 'permission from security', 24);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999111, '16 Tinsley Street', 'permission from manager', null);
+values (999999111, '16 Tinsley Street', 'permission from manager', 626);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999112, '1 Miles Street', 'permission from security', null);
+values (999999112, '1 Miles Street', 'permission from security', 2843);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999114, '8 Vincent Blvd', 'permission from manager', null);
+values (999999114, '8 Vincent Blvd', 'permission from manager', 915);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999116, '38 Padova', 'permission from manager', null);
+values (999999116, '38 Padova', 'permission from manager', 1300);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999117, '89 Chandler Ave', 'permission from security', null);
+values (999999117, '89 Chandler Ave', 'permission from security', 476);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999118, '48 Astin Road', 'permission from security', null);
+values (999999118, '48 Astin Road', 'permission from security', 1820);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999119, '8 West Launceston Street', 'permission from security', null);
+values (999999119, '8 West Launceston Street', 'permission from security', 1736);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999120, '75 Dempsey Road', 'permission from security', null);
+values (999999120, '75 Dempsey Road', 'permission from security', 120);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999121, '87 Aniston Street', 'permission from manager', null);
+values (999999121, '87 Aniston Street', 'permission from manager', 1695);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999122, '50 Arlington', 'permission from security', null);
+values (999999122, '50 Arlington', 'permission from security', 2639);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999123, '577 Traralgon Road', 'permission from security', null);
+values (999999123, '577 Traralgon Road', 'permission from security', 1112);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999124, '886 Huston Drive', 'permission from security', null);
+values (999999124, '886 Huston Drive', 'permission from security', 178);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999125, '724 Cassidy', 'permission from security', null);
+values (999999125, '724 Cassidy', 'permission from security', 211);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999126, '91 Carla Road', 'permission from security', null);
+values (999999126, '91 Carla Road', 'permission from security', 381);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999127, '41 Angelina', 'permission from manager', null);
+values (999999127, '41 Angelina', 'permission from manager', 1120);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999128, '30 Head Drive', 'permission from manager', null);
+values (999999128, '30 Head Drive', 'permission from manager', 2234);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999129, '71 Keitel Blvd', 'permission from security', null);
+values (999999129, '71 Keitel Blvd', 'permission from security', 96);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999132, '22 Manaus Ave', 'permission from manager', null);
+values (999999132, '22 Manaus Ave', 'permission from manager', 580);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999133, '23rd Street', 'permission from security', null);
+values (999999133, '23rd Street', 'permission from security', 1052);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999134, '61 Keeslar Street', 'permission from manager', null);
+values (999999134, '61 Keeslar Street', 'permission from manager', 246);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999136, '17 Grand Rapids', 'permission from manager', null);
+values (999999136, '17 Grand Rapids', 'permission from manager', 1060);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999137, '61 Bingham Farms Street', 'permission from manager', null);
+values (999999137, '61 Bingham Farms Street', 'permission from manager', 1402);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999138, '70 Benicio Street', 'permission from manager', null);
+values (999999138, '70 Benicio Street', 'permission from manager', 939);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999139, '42 Frampton Drive', 'permission from manager', null);
+values (999999139, '42 Frampton Drive', 'permission from manager', 1532);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999140, '18 Cuba Street', 'permission from security', null);
+values (999999140, '18 Cuba Street', 'permission from security', 481);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999141, '245 Shand Road', 'permission from security', null);
+values (999999141, '245 Shand Road', 'permission from security', 404);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999143, '523 Bale Road', 'permission from manager', null);
+values (999999143, '523 Bale Road', 'permission from manager', 61);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999144, '535 Indianapolis', 'permission from security', null);
+values (999999144, '535 Indianapolis', 'permission from security', 369);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999146, '18 Richie', 'permission from manager', null);
+values (999999146, '18 Richie', 'permission from manager', 596);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999148, '35 Sinatra Drive', 'permission from security', null);
+values (999999148, '35 Sinatra Drive', 'permission from security', 233);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999150, '679 Lapointe Ave', 'permission from manager', null);
+values (999999150, '679 Lapointe Ave', 'permission from manager', 1104);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999153, '5 Linney Road', 'permission from security', null);
+values (999999153, '5 Linney Road', 'permission from security', 456);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999154, '82nd Street', 'permission from manager', null);
+values (999999154, '82nd Street', 'permission from manager', 2170);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999155, '32nd Street', 'permission from security', null);
+values (999999155, '32nd Street', 'permission from security', 974);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999156, '30 Vendetta Blvd', 'permission from manager', null);
+values (999999156, '30 Vendetta Blvd', 'permission from manager', 260);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999157, '38 Kenoly Street', 'permission from security', null);
+values (999999157, '38 Kenoly Street', 'permission from security', 272);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999160, '90 Llewelyn Drive', 'permission from manager', null);
+values (999999160, '90 Llewelyn Drive', 'permission from manager', 1692);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999163, '63rd Street', 'permission from security', null);
+values (999999163, '63rd Street', 'permission from security', 2192);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999165, '626 Carlingford Drive', 'permission from security', null);
+values (999999165, '626 Carlingford Drive', 'permission from security', 1314);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999167, '99 Lila Drive', 'permission from manager', null);
+values (999999167, '99 Lila Drive', 'permission from manager', 562);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999168, '22 Zagreb Ave', 'permission from manager', null);
+values (999999168, '22 Zagreb Ave', 'permission from manager', 1316);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999170, '70 Nathan Ave', 'permission from security', null);
+values (999999170, '70 Nathan Ave', 'permission from security', 136);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999172, '491 Miki Drive', 'permission from security', null);
+values (999999172, '491 Miki Drive', 'permission from security', 1312);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999174, '84 Cochran Drive', 'permission from security', null);
+values (999999174, '84 Cochran Drive', 'permission from security', 920);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999175, '97 Jaime Street', 'permission from security', null);
+values (999999175, '97 Jaime Street', 'permission from security', 1042);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999176, '676 Janeane Ave', 'permission from manager', null);
+values (999999176, '676 Janeane Ave', 'permission from manager', 2932);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999177, '88 Dermot Ave', 'permission from manager', null);
+values (999999177, '88 Dermot Ave', 'permission from manager', 496);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999178, '87 Eileen Street', 'permission from manager', null);
+values (999999178, '87 Eileen Street', 'permission from manager', 244);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999180, '17 Breslin', 'permission from security', null);
+values (999999180, '17 Breslin', 'permission from security', 936);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999182, '49 Trejo Ave', 'permission from security', null);
+values (999999182, '49 Trejo Ave', 'permission from security', 120);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999183, '45 Kid', 'permission from security', null);
+values (999999183, '45 Kid', 'permission from security', 196);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999185, '86 Elijah', 'permission from manager', null);
+values (999999185, '86 Elijah', 'permission from manager', 284);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999186, '82 Gryner Blvd', 'permission from manager', null);
+values (999999186, '82 Gryner Blvd', 'permission from manager', 1428);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999191, '78 Chapeco', 'permission from manager', null);
+values (999999191, '78 Chapeco', 'permission from manager', 268);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999192, '96 Naha Street', 'permission from manager', null);
+values (999999192, '96 Naha Street', 'permission from manager', 844);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999193, '23 Haysbert Drive', 'permission from manager', null);
+values (999999193, '23 Haysbert Drive', 'permission from manager', 1986);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999194, '904 Brothers', 'permission from manager', null);
+values (999999194, '904 Brothers', 'permission from manager', 1148);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999195, '2 Olin Drive', 'permission from manager', null);
+values (999999195, '2 Olin Drive', 'permission from manager', 356);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999196, '93 North Yorkshire Street', 'permission from security', null);
+values (999999196, '93 North Yorkshire Street', 'permission from security', 227);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999197, '35 Sedaka Blvd', 'permission from security', null);
+values (999999197, '35 Sedaka Blvd', 'permission from security', 1040);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999198, '25 Nicosia Road', 'permission from security', null);
+values (999999198, '25 Nicosia Road', 'permission from security', 2336);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999199, '86 Borgnine Street', 'permission from manager', null);
+values (999999199, '86 Borgnine Street', 'permission from manager', 2520);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999200, '92 Wehrheim Blvd', 'permission from organization head', null);
+values (999999200, '92 Wehrheim Blvd', 'permission from organization head', 260);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999201, '23 Boothe Road', 'permission from organization head', null);
+values (999999201, '23 Boothe Road', 'permission from organization head', 692);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999202, '25 Puckett Street', 'ID is required', null);
+values (999999202, '25 Puckett Street', 'ID is required', 2844);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999205, '99 Tualatin Drive', 'ID is required', null);
+values (999999205, '99 Tualatin Drive', 'ID is required', 1012);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999206, '80 Chely Road', 'permission from organization head', null);
+values (999999206, '80 Chely Road', 'permission from organization head', 932);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999207, '86 Pleasure Drive', 'ID is required', null);
+values (999999207, '86 Pleasure Drive', 'ID is required', 948);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999208, '31st Street', 'permission from organization head', null);
+values (999999208, '31st Street', 'permission from organization head', 1688);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999210, '45 Bend Street', 'permission from organization head', null);
+values (999999210, '45 Bend Street', 'permission from organization head', 1810);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999211, '776 Hawke', 'ID is required', null);
+values (999999211, '776 Hawke', 'ID is required', 2448);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999212, '83 Duchovny Drive', 'permission from organization head', null);
+values (999999212, '83 Duchovny Drive', 'permission from organization head', 264);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999213, '93 Gibbons Road', 'permission from organization head', null);
+values (999999213, '93 Gibbons Road', 'permission from organization head', 524);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999215, '72 Schneider Road', 'ID is required', null);
+values (999999215, '72 Schneider Road', 'ID is required', 1350);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999216, '74 Owen Drive', 'ID is required', null);
+values (999999216, '74 Owen Drive', 'ID is required', 432);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999217, '76 Browne Road', 'permission from organization head', null);
+values (999999217, '76 Browne Road', 'permission from organization head', 140);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999218, '52nd Street', 'permission from organization head', null);
+values (999999218, '52nd Street', 'permission from organization head', 748);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999220, '134 Zuerich Street', 'ID is required', null);
+values (999999220, '134 Zuerich Street', 'ID is required', 1360);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999222, '59 Moraz Street', 'ID is required', null);
+values (999999222, '59 Moraz Street', 'ID is required', 180);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999223, '21 Elias Blvd', 'ID is required', null);
+values (999999223, '21 Elias Blvd', 'ID is required', 588);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999225, '99 Carson City', 'permission from organization head', null);
+values (999999225, '99 Carson City', 'permission from organization head', 832);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999227, '89 Gatlin Ave', 'ID is required', null);
+values (999999227, '89 Gatlin Ave', 'ID is required', 354);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999228, '21st Street', 'permission from organization head', null);
+values (999999228, '21st Street', 'permission from organization head', 245);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999229, '62 Concordville Drive', 'permission from organization head', null);
+values (999999229, '62 Concordville Drive', 'permission from organization head', 1612);
 commit;
 prompt 100 records committed...
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999230, '9 Barry Street', 'permission from organization head', null);
+values (999999230, '9 Barry Street', 'permission from organization head', 932);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999231, '55 Dysart Street', 'permission from organization head', null);
+values (999999231, '55 Dysart Street', 'permission from organization head', 427);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999232, '74 Vaughn Drive', 'permission from organization head', null);
+values (999999232, '74 Vaughn Drive', 'permission from organization head', 360);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999233, '89 Luzern Street', 'permission from organization head', null);
+values (999999233, '89 Luzern Street', 'permission from organization head', 213);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999800, 'heretz 9', 'permission from chief security officer', null);
+values (999999800, 'heretz 9', 'permission from chief security officer', 0);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999235, '59 O''fallon Drive', 'permission from organization head', null);
+values (999999235, '59 O''fallon Drive', 'permission from organization head', 1212);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999801, 'Yosef 19', 'permission from organization head', null);
+values (999999801, 'Yosef 19', 'permission from organization head', 0);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999900, 'Yosef 50', 'permission from security', null);
+values (999999900, 'Yosef 50', 'permission from security', 0);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999238, '17 Seth Blvd', 'permission from organization head', null);
+values (999999238, '17 Seth Blvd', 'permission from organization head', 1260);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999901, 'Moshe 30', 'permission from security', null);
+values (999999901, 'Moshe 30', 'permission from security', 0);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999240, '667 Holts Summit Road', 'permission from organization head', null);
+values (999999240, '667 Holts Summit Road', 'permission from organization head', 728);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999241, '100 Ripley Drive', 'ID is required', null);
+values (999999241, '100 Ripley Drive', 'ID is required', 242);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999242, '11 Belle Street', 'ID is required', null);
+values (999999242, '11 Belle Street', 'ID is required', 457);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999243, '35 Annie Road', 'ID is required', null);
+values (999999243, '35 Annie Road', 'ID is required', 346);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999244, '154 Madonna Road', 'permission from organization head', null);
+values (999999244, '154 Madonna Road', 'permission from organization head', 1365);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999245, '73rd Street', 'ID is required', null);
+values (999999245, '73rd Street', 'ID is required', 894);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999246, '729 Drogenbos Street', 'ID is required', null);
+values (999999246, '729 Drogenbos Street', 'ID is required', 500);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999248, '63 Johnson Blvd', 'permission from organization head', null);
+values (999999248, '63 Johnson Blvd', 'permission from organization head', 4552);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999249, '52 Matt Street', 'ID is required', null);
+values (999999249, '52 Matt Street', 'ID is required', 83);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999250, '97 Crete Road', 'ID is required', null);
+values (999999250, '97 Crete Road', 'ID is required', 1727);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999251, '20 Apple', 'permission from organization head', null);
+values (999999251, '20 Apple', 'permission from organization head', 391);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999252, '42 Port Macquarie Road', 'ID is required', null);
+values (999999252, '42 Port Macquarie Road', 'ID is required', 756);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999253, '58 Frances Road', 'ID is required', null);
+values (999999253, '58 Frances Road', 'ID is required', 1412);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (541234567, '123 Herzl St', ' premisson from manager', null);
+values (541234567, '123 Herzl St', ' premisson from manager', 772);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (543456789, '789 Dizengoff St', ' premisson from supervisor', null);
+values (543456789, '789 Dizengoff St', ' premisson from supervisor', 1376);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (544567890, '101 Allenby St', ' premisson from building owner', null);
+values (544567890, '101 Allenby St', ' premisson from building owner', 1355);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (545678901, '202 Jaffa Rd', ' premisson from tenant', null);
+values (545678901, '202 Jaffa Rd', ' premisson from tenant', 1405);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (546789012, '303 Ben Yehuda St', ' premisson from landlord', null);
+values (546789012, '303 Ben Yehuda St', ' premisson from landlord', 820);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (548901234, '505 Ibn Gvirol St', ' premisson from property manager', null);
+values (548901234, '505 Ibn Gvirol St', ' premisson from property manager', 118);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (541098765, '808 HaNeviim St', ' premisson from site manager', null);
+values (541098765, '808 HaNeviim St', ' premisson from site manager', 916);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (543098765, '111 Weizmann St', ' premisson from department head', null);
+values (543098765, '111 Weizmann St', ' premisson from department head', 1412);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (544098765, '222 Begin Blvd', ' premisson from company', null);
+values (544098765, '222 Begin Blvd', ' premisson from company', 672);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (545098765, '333 Yefet St', ' premisson from local authorities', null);
+values (545098765, '333 Yefet St', ' premisson from local authorities', 1277);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (546098765, '444 Derech Hashalom', ' premisson from neighborhood committee', null);
+values (546098765, '444 Derech Hashalom', ' premisson from neighborhood committee', 404);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (547098765, '555 Agron St', ' premisson from site coordinator', null);
+values (547098765, '555 Agron St', ' premisson from site coordinator', 833);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (549098765, '777 Jabotinsky St', ' premisson from organization head', null);
+values (549098765, '777 Jabotinsky St', ' premisson from organization head', 748);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999254, '80 Wincott Blvd', 'ID is required', null);
+values (999999254, '80 Wincott Blvd', 'ID is required', 108);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999050, '872 Marina Street', 'permission from organization head', null);
+values (999999050, '872 Marina Street', 'permission from organization head', 528);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999051, '33rd Street', 'permission from chief security officer', null);
+values (999999051, '33rd Street', 'permission from chief security officer', 892);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999052, '799 Neill Street', 'permission from chief security officer', null);
+values (999999052, '799 Neill Street', 'permission from chief security officer', 380);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999054, '196 Rosanna Road', 'permission from chief security officer', null);
+values (999999054, '196 Rosanna Road', 'permission from chief security officer', 465);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999055, '1 Whitman Road', 'permission from organization head', null);
+values (999999055, '1 Whitman Road', 'permission from organization head', 263);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999058, '95 Caan', 'permission from organization head', null);
+values (999999058, '95 Caan', 'permission from organization head', 137);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999060, '19 Keeslar Blvd', 'permission from chief security officer', null);
+values (999999060, '19 Keeslar Blvd', 'permission from chief security officer', 108);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999061, '51 Wakayama Road', 'permission from organization head', null);
+values (999999061, '51 Wakayama Road', 'permission from organization head', 1008);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999062, '94 Augst Drive', 'permission from organization head', null);
+values (999999062, '94 Augst Drive', 'permission from organization head', 1440);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999064, '73rd Street', 'permission from chief security officer', null);
+values (999999064, '73rd Street', 'permission from chief security officer', 888);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999065, '65 Emmerich', 'permission from organization head', null);
+values (999999065, '65 Emmerich', 'permission from organization head', 528);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999067, '43 Pitney Road', 'permission from organization head', null);
+values (999999067, '43 Pitney Road', 'permission from organization head', 1730);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999068, '91st Street', 'permission from organization head', null);
+values (999999068, '91st Street', 'permission from organization head', 3052);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999070, '636 Dallas Road', 'permission from chief security officer', null);
+values (999999070, '636 Dallas Road', 'permission from chief security officer', 1468);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999071, '54 Dabney Road', 'permission from organization head', null);
+values (999999071, '54 Dabney Road', 'permission from organization head', 80);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999072, '1 Betty Road', 'permission from organization head', null);
+values (999999072, '1 Betty Road', 'permission from organization head', 1744);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999073, '92 Andrew Street', 'permission from organization head', null);
+values (999999073, '92 Andrew Street', 'permission from organization head', 432);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999074, '22 Eugene Blvd', 'permission from chief security officer', null);
+values (999999074, '22 Eugene Blvd', 'permission from chief security officer', 130);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999075, '16 Crudup Drive', 'permission from chief security officer', null);
+values (999999075, '16 Crudup Drive', 'permission from chief security officer', 1200);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999076, '56 Longueuil Road', 'permission from chief security officer', null);
+values (999999076, '56 Longueuil Road', 'permission from chief security officer', 464);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999078, '883 Oshkosh Road', 'permission from organization head', null);
+values (999999078, '883 Oshkosh Road', 'permission from organization head', 495);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999080, '25 Worrell Blvd', 'permission from organization head', null);
+values (999999080, '25 Worrell Blvd', 'permission from organization head', 136);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999081, '80 Hughes Road', 'permission from chief security officer', null);
+values (999999081, '80 Hughes Road', 'permission from chief security officer', 324);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999082, '13 George Drive', 'permission from chief security officer', null);
+values (999999082, '13 George Drive', 'permission from chief security officer', 1262);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999083, '50 Santana', 'permission from organization head', null);
+values (999999083, '50 Santana', 'permission from organization head', 992);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999085, '52 Key Biscayne Drive', 'permission from organization head', null);
+values (999999085, '52 Key Biscayne Drive', 'permission from organization head', 1032);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999087, '13rd Street', 'permission from chief security officer', null);
+values (999999087, '13rd Street', 'permission from chief security officer', 1013);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999088, '11 Stephanie Street', 'permission from organization head', null);
+values (999999088, '11 Stephanie Street', 'permission from organization head', 526);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999089, '7 Terence Drive', 'permission from chief security officer', null);
+values (999999089, '7 Terence Drive', 'permission from chief security officer', 436);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999090, '80 Grier Drive', 'permission from chief security officer', null);
+values (999999090, '80 Grier Drive', 'permission from chief security officer', 820);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999091, '34 Coltrane Drive', 'permission from chief security officer', null);
+values (999999091, '34 Coltrane Drive', 'permission from chief security officer', 356);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999256, '89 Varzea grande Street', 'ID is required', null);
+values (999999256, '89 Varzea grande Street', 'ID is required', 684);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999258, '96 Oakenfold Drive', 'ID is required', null);
+values (999999258, '96 Oakenfold Drive', 'ID is required', 1718);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999260, '27 Moreno Road', 'permission from organization head', null);
+values (999999260, '27 Moreno Road', 'permission from organization head', 630);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999261, '31 Ruiz Road', 'permission from organization head', null);
+values (999999261, '31 Ruiz Road', 'permission from organization head', 312);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999262, '340 Lakewood Road', 'ID is required', null);
+values (999999262, '340 Lakewood Road', 'ID is required', 1304);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999263, '66 Gagnon Street', 'permission from organization head', null);
+values (999999263, '66 Gagnon Street', 'permission from organization head', 884);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999265, '759 Rowan Street', 'permission from organization head', null);
+values (999999265, '759 Rowan Street', 'permission from organization head', 1512);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999266, '8 Arquette Street', 'ID is required', null);
+values (999999266, '8 Arquette Street', 'ID is required', 628);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999268, '49 Guy Ave', 'permission from organization head', null);
+values (999999268, '49 Guy Ave', 'permission from organization head', 153);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999269, '11 Susan Ave', 'permission from organization head', null);
+values (999999269, '11 Susan Ave', 'permission from organization head', 1248);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999270, '3 Tramaine Street', 'permission from organization head', null);
+values (999999270, '3 Tramaine Street', 'permission from organization head', 370);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999271, '48 Nikka Blvd', 'ID is required', null);
+values (999999271, '48 Nikka Blvd', 'ID is required', 291);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999273, '60 Livermore Street', 'ID is required', null);
+values (999999273, '60 Livermore Street', 'ID is required', 540);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999274, '91 Gabriel Drive', 'ID is required', null);
+values (999999274, '91 Gabriel Drive', 'ID is required', 1468);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999278, '610 Hannah', 'ID is required', null);
+values (999999278, '610 Hannah', 'ID is required', 1571);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999279, '96 Getty Ave', 'ID is required', null);
+values (999999279, '96 Getty Ave', 'ID is required', 104);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999280, '11 Choice Blvd', 'ID is required', null);
+values (999999280, '11 Choice Blvd', 'ID is required', 122);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999281, '51 Seoul Drive', 'ID is required', null);
+values (999999281, '51 Seoul Drive', 'ID is required', 104);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999285, '831 David Road', 'ID is required', null);
+values (999999285, '831 David Road', 'ID is required', 651);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999288, '49 Paquin Drive', 'permission from organization head', null);
+values (999999288, '49 Paquin Drive', 'permission from organization head', 602);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999290, '64 Duisburg Street', 'ID is required', null);
+values (999999290, '64 Duisburg Street', 'ID is required', 1329);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999291, '289 Tilda Ave', 'ID is required', null);
+values (999999291, '289 Tilda Ave', 'ID is required', 3476);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999293, '418 Cooper Road', 'ID is required', null);
+values (999999293, '418 Cooper Road', 'ID is required', 952);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999294, '82 Vega Road', 'ID is required', null);
+values (999999294, '82 Vega Road', 'ID is required', 202);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999296, '83 Pepper Street', 'permission from organization head', null);
+values (999999296, '83 Pepper Street', 'permission from organization head', 236);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999298, '60 Hawn Blvd', 'permission from organization head', null);
+values (999999298, '60 Hawn Blvd', 'permission from organization head', 656);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999299, '67 Los Angeles Blvd', 'ID is required', null);
+values (999999299, '67 Los Angeles Blvd', 'ID is required', 312);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999300, '85 Day-Lewis Blvd', 'permission from building owner', null);
+values (999999300, '85 Day-Lewis Blvd', 'permission from building owner', 1124);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999301, '65 McDowall', '''permission from tenant', null);
+values (999999301, '65 McDowall', '''permission from tenant', 924);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999303, '79 Pointe-claire', '''permission from tenant', null);
+values (999999303, '79 Pointe-claire', '''permission from tenant', 372);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999304, '31 Friedrichshafe Road', 'permission from building owner', null);
+values (999999304, '31 Friedrichshafe Road', 'permission from building owner', 1248);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999305, '361 El Paso Road', 'permission from building owner', null);
+values (999999305, '361 El Paso Road', 'permission from building owner', 1464);
 commit;
 prompt 200 records committed...
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999306, '96 Cheadle Drive', 'permission from building owner', null);
+values (999999306, '96 Cheadle Drive', 'permission from building owner', 1464);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999310, '51 Clarence Road', '''permission from tenant', null);
+values (999999310, '51 Clarence Road', '''permission from tenant', 376);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999312, '521 Rhames Road', 'permission from building owner', null);
+values (999999312, '521 Rhames Road', 'permission from building owner', 359);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999313, '99 Wilder Drive', 'permission from building owner', null);
+values (999999313, '99 Wilder Drive', 'permission from building owner', 792);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999315, '89 Santiago Street', 'permission from building owner', null);
+values (999999315, '89 Santiago Street', 'permission from building owner', 256);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999316, '14 Melanie', '''permission from tenant', null);
+values (999999316, '14 Melanie', '''permission from tenant', 1883);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999317, '73rd Street', 'permission from building owner', null);
+values (999999317, '73rd Street', 'permission from building owner', 549);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999319, '45 Spall Street', 'permission from building owner', null);
+values (999999319, '45 Spall Street', 'permission from building owner', 245);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999321, '527 Ethan Street', 'permission from building owner', null);
+values (999999321, '527 Ethan Street', 'permission from building owner', 184);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999322, '520 Li Road', 'permission from building owner', null);
+values (999999322, '520 Li Road', 'permission from building owner', 560);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999323, '78 McGriff', 'permission from building owner', null);
+values (999999323, '78 McGriff', 'permission from building owner', 391);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999325, '98 Hoskins Drive', '''permission from tenant', null);
+values (999999325, '98 Hoskins Drive', '''permission from tenant', 601);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999326, '8 Ceasar Drive', '''permission from tenant', null);
+values (999999326, '8 Ceasar Drive', '''permission from tenant', 1320);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999330, '39 Spring City Road', '''permission from tenant', null);
+values (999999330, '39 Spring City Road', '''permission from tenant', 368);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999331, '91 Bassett Road', '''permission from tenant', null);
+values (999999331, '91 Bassett Road', '''permission from tenant', 1749);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999333, '85 Seann Road', '''permission from tenant', null);
+values (999999333, '85 Seann Road', '''permission from tenant', 776);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999334, '63rd Street', '''permission from tenant', null);
+values (999999334, '63rd Street', '''permission from tenant', 279);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999335, '64 Bogguss Street', '''permission from tenant', null);
+values (999999335, '64 Bogguss Street', '''permission from tenant', 2072);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999337, '23rd Street', 'permission from building owner', null);
+values (999999337, '23rd Street', 'permission from building owner', 416);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999339, '60 Charlize Road', 'permission from building owner', null);
+values (999999339, '60 Charlize Road', 'permission from building owner', 1424);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999340, '488 Yavne Street', 'permission from building owner', null);
+values (999999340, '488 Yavne Street', 'permission from building owner', 1672);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999341, '95 Merillee Road', '''permission from tenant', null);
+values (999999341, '95 Merillee Road', '''permission from tenant', 144);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999342, '29 Saint Paul Street', 'permission from building owner', null);
+values (999999342, '29 Saint Paul Street', 'permission from building owner', 351);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999357, '97 Leipzig Drive', '''permission from tenant', null);
+values (999999357, '97 Leipzig Drive', '''permission from tenant', 1268);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999358, '73rd Street', '''permission from tenant', null);
+values (999999358, '73rd Street', '''permission from tenant', 948);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999359, '2 Washington Blvd', 'permission from building owner', null);
+values (999999359, '2 Washington Blvd', 'permission from building owner', 300);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999360, '77 Corona Street', 'permission from building owner', null);
+values (999999360, '77 Corona Street', 'permission from building owner', 592);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999361, '19 Ferraz  vasconcelos Street', 'permission from building owner', null);
+values (999999361, '19 Ferraz  vasconcelos Street', 'permission from building owner', 353);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999362, '75 Hong Kong Street', 'permission from building owner', null);
+values (999999362, '75 Hong Kong Street', 'permission from building owner', 824);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999363, '1 Beck Road', 'permission from building owner', null);
+values (999999363, '1 Beck Road', 'permission from building owner', 1528);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999364, '68 Carrack', 'permission from building owner', null);
+values (999999364, '68 Carrack', 'permission from building owner', 836);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999343, '44 Bryson Ave', '''permission from tenant', null);
+values (999999343, '44 Bryson Ave', '''permission from tenant', 1644);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999345, '301 Lynne Drive', 'permission from building owner', null);
+values (999999345, '301 Lynne Drive', 'permission from building owner', 308);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999346, '33 Hampton Drive', '''permission from tenant', null);
+values (999999346, '33 Hampton Drive', '''permission from tenant', 524);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999347, '48 Holts Summit', 'permission from building owner', null);
+values (999999347, '48 Holts Summit', 'permission from building owner', 119);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999349, '98 Issaquah', '''permission from tenant', null);
+values (999999349, '98 Issaquah', '''permission from tenant', 279);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999350, '53 Joinville Ave', 'permission from building owner', null);
+values (999999350, '53 Joinville Ave', 'permission from building owner', 231);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999351, '18 Wolf Road', '''permission from tenant', null);
+values (999999351, '18 Wolf Road', '''permission from tenant', 145);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999352, '82 Nicole Drive', '''permission from tenant', null);
+values (999999352, '82 Nicole Drive', '''permission from tenant', 1376);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999353, '36 B?nes Road', '''permission from tenant', null);
+values (999999353, '36 B?nes Road', '''permission from tenant', 170);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999354, '38 Davison Road', '''permission from tenant', null);
+values (999999354, '38 Davison Road', '''permission from tenant', 2092);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999369, '43rd Street', '''permission from tenant', null);
+values (999999369, '43rd Street', '''permission from tenant', 688);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999370, '371 Rod Drive', 'permission from building owner', null);
+values (999999370, '371 Rod Drive', 'permission from building owner', 404);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999373, '6 Cuba Street', '''permission from tenant', null);
+values (999999373, '6 Cuba Street', '''permission from tenant', 183);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999374, '22 Gdansk Drive', '''permission from tenant', null);
+values (999999374, '22 Gdansk Drive', '''permission from tenant', 343);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999375, '74 Nyn?shamn Road', 'permission from building owner', null);
+values (999999375, '74 Nyn?shamn Road', 'permission from building owner', 366);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999377, '71 Jim Blvd', 'permission from building owner', null);
+values (999999377, '71 Jim Blvd', 'permission from building owner', 2650);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999378, '12 Patrick Road', 'permission from building owner', null);
+values (999999378, '12 Patrick Road', 'permission from building owner', 540);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999379, '81 Nielsen Street', '''permission from tenant', null);
+values (999999379, '81 Nielsen Street', '''permission from tenant', 126);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999380, '28 Victoria Drive', '''permission from tenant', null);
+values (999999380, '28 Victoria Drive', '''permission from tenant', 1566);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999381, '49 Miami Drive', 'permission from building owner', null);
+values (999999381, '49 Miami Drive', 'permission from building owner', 2412);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999382, '26 Amarillo Street', '''permission from tenant', null);
+values (999999382, '26 Amarillo Street', '''permission from tenant', 876);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999383, '40 Reykjavik Road', 'permission from building owner', null);
+values (999999383, '40 Reykjavik Road', 'permission from building owner', 792);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999384, '783 Barbara Road', '''permission from tenant', null);
+values (999999384, '783 Barbara Road', '''permission from tenant', 860);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999385, '267 Westerberg Blvd', 'permission from building owner', null);
+values (999999385, '267 Westerberg Blvd', 'permission from building owner', 1141);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999389, '99 Robby Street', '''permission from tenant', null);
+values (999999389, '99 Robby Street', '''permission from tenant', 134);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999000, '38 Tilly Drive', '"permission from facility manager"', null);
+values (999999000, '38 Tilly Drive', '"permission from facility manager"', 2209);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999001, '26 Gunton Street', '"permission from tenant"', null);
+values (999999001, '26 Gunton Street', '"permission from tenant"', 420);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999002, '31st Street', 'permission from organization head', null);
+values (999999002, '31st Street', 'permission from organization head', 832);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999003, '758 Bryan Street', 'permission from chief security officer', null);
+values (999999003, '758 Bryan Street', 'permission from chief security officer', 2020);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999004, '29 Tlalpan Street', 'permission from organization head', null);
+values (999999004, '29 Tlalpan Street', 'permission from organization head', 219);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999006, '6 Pasadena', 'permission from chief security officer', null);
+values (999999006, '6 Pasadena', 'permission from chief security officer', 1500);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999007, '242 Lavigne Street', 'permission from organization head', null);
+values (999999007, '242 Lavigne Street', 'permission from organization head', 168);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999008, '32 Peter Road', 'permission from organization head', null);
+values (999999008, '32 Peter Road', 'permission from organization head', 3125);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999009, '32 Newton-le-willows Road', 'permission from organization head', null);
+values (999999009, '32 Newton-le-willows Road', 'permission from organization head', 334);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999010, '73 Bellevue Road', 'permission from chief security officer', null);
+values (999999010, '73 Bellevue Road', 'permission from chief security officer', 1747);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999011, '64 Phillippe Drive', 'permission from organization head', null);
+values (999999011, '64 Phillippe Drive', 'permission from organization head', 788);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999012, '95 Quinn Road', 'permission from chief security officer', null);
+values (999999012, '95 Quinn Road', 'permission from chief security officer', 98);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999013, '16 Yolanda Blvd', 'permission from chief security officer', null);
+values (999999013, '16 Yolanda Blvd', 'permission from chief security officer', 490);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999014, '8 Hayes', 'permission from chief security officer', null);
+values (999999014, '8 Hayes', 'permission from chief security officer', 1738);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999015, '35 Gambon Street', 'permission from chief security officer', null);
+values (999999015, '35 Gambon Street', 'permission from chief security officer', 774);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999016, '994 Wesley Road', 'permission from organization head', null);
+values (999999016, '994 Wesley Road', 'permission from organization head', 1724);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999018, '82 Hawke Drive', 'permission from organization head', null);
+values (999999018, '82 Hawke Drive', 'permission from organization head', 2148);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999019, '79 Warrington Drive', 'permission from chief security officer', null);
+values (999999019, '79 Warrington Drive', 'permission from chief security officer', 478);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999020, '79 Domingo Drive', 'permission from organization head', null);
+values (999999020, '79 Domingo Drive', 'permission from organization head', 502);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999021, '83rd Street', 'permission from organization head', null);
+values (999999021, '83rd Street', 'permission from organization head', 1316);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999022, '7 Aracruz Road', 'permission from organization head', null);
+values (999999022, '7 Aracruz Road', 'permission from organization head', 1759);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999023, '18 Darren Street', 'permission from chief security officer', null);
+values (999999023, '18 Darren Street', 'permission from chief security officer', 550);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999025, '60 Roberts Ave', 'permission from organization head', null);
+values (999999025, '60 Roberts Ave', 'permission from organization head', 748);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999027, '72 Rosas Street', 'permission from chief security officer', null);
+values (999999027, '72 Rosas Street', 'permission from chief security officer', 524);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999028, '21 Peterson Road', 'permission from chief security officer', null);
+values (999999028, '21 Peterson Road', 'permission from chief security officer', 708);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999029, '430 Carlton Drive', 'permission from organization head', null);
+values (999999029, '430 Carlton Drive', 'permission from organization head', 262);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999030, '14 Day Street', 'permission from chief security officer', null);
+values (999999030, '14 Day Street', 'permission from chief security officer', 400);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999031, '42nd Street', 'permission from chief security officer', null);
+values (999999031, '42nd Street', 'permission from chief security officer', 822);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999032, '42 Trieste Drive', 'permission from chief security officer', null);
+values (999999032, '42 Trieste Drive', 'permission from chief security officer', 123);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999033, '74 Day Ave', 'permission from chief security officer', null);
+values (999999033, '74 Day Ave', 'permission from chief security officer', 766);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999035, '71st Street', 'permission from chief security officer', null);
+values (999999035, '71st Street', 'permission from chief security officer', 1560);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999036, '80 Calcutta Blvd', 'permission from chief security officer', null);
+values (999999036, '80 Calcutta Blvd', 'permission from chief security officer', 1300);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999037, '4 Patrick Blvd', 'permission from chief security officer', null);
+values (999999037, '4 Patrick Blvd', 'permission from chief security officer', 1476);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999039, '79 Kenoly Ave', 'permission from organization head', null);
+values (999999039, '79 Kenoly Ave', 'permission from organization head', 1414);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999043, '89 Burns Road', 'permission from chief security officer', null);
+values (999999043, '89 Burns Road', 'permission from chief security officer', 1316);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999044, '10 Sizemore Road', 'permission from organization head', null);
+values (999999044, '10 Sizemore Road', 'permission from organization head', 584);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999045, '87 Schlieren Blvd', 'permission from chief security officer', null);
+values (999999045, '87 Schlieren Blvd', 'permission from chief security officer', 272);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999046, '7 Johansson Drive', 'permission from organization head', null);
+values (999999046, '7 Johansson Drive', 'permission from organization head', 572);
 insert into LOCATION (phonenumber, address, instructions, capacity)
-values (999999049, '18 Wayman Street', 'permission from chief security officer', null);
+values (999999049, '18 Wayman Street', 'permission from chief security officer', 896);
 commit;
 prompt 295 records loaded
 prompt Loading ITEM...
@@ -2423,6 +2544,46 @@ values (82, to_date('02-06-2024 11:28:20', 'dd-mm-yyyy hh24:mi:ss'), 'difficult'
 insert into MAINTENANCE (maintenanceid, maintenancedate, description, itemid)
 values (83, to_date('02-06-2024 11:28:20', 'dd-mm-yyyy hh24:mi:ss'), 'difficult', 48);
 insert into MAINTENANCE (maintenanceid, maintenancedate, description, itemid)
+values (416, to_date('07-07-2024 11:42:00', 'dd-mm-yyyy hh24:mi:ss'), 'donor asked', 117);
+insert into MAINTENANCE (maintenanceid, maintenancedate, description, itemid)
+values (417, to_date('07-07-2024 11:42:00', 'dd-mm-yyyy hh24:mi:ss'), 'donor asked', 104);
+insert into MAINTENANCE (maintenanceid, maintenancedate, description, itemid)
+values (418, to_date('07-07-2024 11:42:00', 'dd-mm-yyyy hh24:mi:ss'), 'donor asked', 67);
+insert into MAINTENANCE (maintenanceid, maintenancedate, description, itemid)
+values (419, to_date('07-07-2024 11:42:00', 'dd-mm-yyyy hh24:mi:ss'), 'donor asked', 70);
+insert into MAINTENANCE (maintenanceid, maintenancedate, description, itemid)
+values (420, to_date('07-07-2024 11:42:03', 'dd-mm-yyyy hh24:mi:ss'), 'donor asked', 117);
+insert into MAINTENANCE (maintenanceid, maintenancedate, description, itemid)
+values (421, to_date('07-07-2024 11:42:03', 'dd-mm-yyyy hh24:mi:ss'), 'donor asked', 104);
+insert into MAINTENANCE (maintenanceid, maintenancedate, description, itemid)
+values (422, to_date('07-07-2024 11:42:03', 'dd-mm-yyyy hh24:mi:ss'), 'donor asked', 67);
+insert into MAINTENANCE (maintenanceid, maintenancedate, description, itemid)
+values (423, to_date('07-07-2024 11:42:03', 'dd-mm-yyyy hh24:mi:ss'), 'donor asked', 70);
+insert into MAINTENANCE (maintenanceid, maintenancedate, description, itemid)
+values (424, to_date('07-07-2024 11:47:26', 'dd-mm-yyyy hh24:mi:ss'), 'donor asked', 117);
+insert into MAINTENANCE (maintenanceid, maintenancedate, description, itemid)
+values (425, to_date('07-07-2024 11:47:26', 'dd-mm-yyyy hh24:mi:ss'), 'donor asked', 104);
+insert into MAINTENANCE (maintenanceid, maintenancedate, description, itemid)
+values (426, to_date('07-07-2024 11:47:26', 'dd-mm-yyyy hh24:mi:ss'), 'donor asked', 67);
+insert into MAINTENANCE (maintenanceid, maintenancedate, description, itemid)
+values (427, to_date('07-07-2024 11:47:26', 'dd-mm-yyyy hh24:mi:ss'), 'donor asked', 70);
+insert into MAINTENANCE (maintenanceid, maintenancedate, description, itemid)
+values (428, to_date('02-05-2021', 'dd-mm-yyyy'), 'donor asked', 117);
+insert into MAINTENANCE (maintenanceid, maintenancedate, description, itemid)
+values (429, to_date('02-05-2021', 'dd-mm-yyyy'), 'donor asked', 104);
+insert into MAINTENANCE (maintenanceid, maintenancedate, description, itemid)
+values (430, to_date('02-05-2021', 'dd-mm-yyyy'), 'donor asked', 67);
+insert into MAINTENANCE (maintenanceid, maintenancedate, description, itemid)
+values (431, to_date('02-05-2021', 'dd-mm-yyyy'), 'donor asked', 70);
+insert into MAINTENANCE (maintenanceid, maintenancedate, description, itemid)
+values (432, to_date('18-07-2024 02:03:52', 'dd-mm-yyyy hh24:mi:ss'), 'donor asked', 117);
+insert into MAINTENANCE (maintenanceid, maintenancedate, description, itemid)
+values (433, to_date('18-07-2024 02:03:52', 'dd-mm-yyyy hh24:mi:ss'), 'donor asked', 104);
+insert into MAINTENANCE (maintenanceid, maintenancedate, description, itemid)
+values (434, to_date('18-07-2024 02:03:52', 'dd-mm-yyyy hh24:mi:ss'), 'donor asked', 67);
+insert into MAINTENANCE (maintenanceid, maintenancedate, description, itemid)
+values (435, to_date('18-07-2024 02:03:52', 'dd-mm-yyyy hh24:mi:ss'), 'donor asked', 70);
+insert into MAINTENANCE (maintenanceid, maintenancedate, description, itemid)
 values (140, to_date('02-06-2024 11:28:20', 'dd-mm-yyyy hh24:mi:ss'), 'Need continue', 14);
 insert into MAINTENANCE (maintenanceid, maintenancedate, description, itemid)
 values (141, to_date('02-06-2024 11:28:20', 'dd-mm-yyyy hh24:mi:ss'), 'easy', 39);
@@ -2492,6 +2653,8 @@ insert into MAINTENANCE (maintenanceid, maintenancedate, description, itemid)
 values (173, to_date('02-06-2024 11:28:20', 'dd-mm-yyyy hh24:mi:ss'), 'Need continue', 91);
 insert into MAINTENANCE (maintenanceid, maintenancedate, description, itemid)
 values (174, to_date('02-06-2024 11:28:20', 'dd-mm-yyyy hh24:mi:ss'), 'difficult', 103);
+commit;
+prompt 300 records committed...
 insert into MAINTENANCE (maintenanceid, maintenancedate, description, itemid)
 values (175, to_date('02-06-2024 11:28:20', 'dd-mm-yyyy hh24:mi:ss'), 'easy', 16);
 insert into MAINTENANCE (maintenanceid, maintenancedate, description, itemid)
@@ -2532,8 +2695,6 @@ insert into MAINTENANCE (maintenanceid, maintenancedate, description, itemid)
 values (193, to_date('02-06-2024 11:28:20', 'dd-mm-yyyy hh24:mi:ss'), 'Need continue', 33);
 insert into MAINTENANCE (maintenanceid, maintenancedate, description, itemid)
 values (194, to_date('02-06-2024 11:28:20', 'dd-mm-yyyy hh24:mi:ss'), 'difficult', 108);
-commit;
-prompt 300 records committed...
 insert into MAINTENANCE (maintenanceid, maintenancedate, description, itemid)
 values (195, to_date('02-06-2024 11:28:20', 'dd-mm-yyyy hh24:mi:ss'), 'difficult', 46);
 insert into MAINTENANCE (maintenanceid, maintenancedate, description, itemid)
@@ -2645,6 +2806,14 @@ values (248, to_date('02-06-2024 11:28:20', 'dd-mm-yyyy hh24:mi:ss'), 'easy', 68
 insert into MAINTENANCE (maintenanceid, maintenancedate, description, itemid)
 values (249, to_date('02-06-2024 11:28:20', 'dd-mm-yyyy hh24:mi:ss'), 'easy', 110);
 insert into MAINTENANCE (maintenanceid, maintenancedate, description, itemid)
+values (412, to_date('07-07-2024', 'dd-mm-yyyy'), 'donor asked', 117);
+insert into MAINTENANCE (maintenanceid, maintenancedate, description, itemid)
+values (413, to_date('07-07-2024', 'dd-mm-yyyy'), 'donor asked', 104);
+insert into MAINTENANCE (maintenanceid, maintenancedate, description, itemid)
+values (414, to_date('07-07-2024', 'dd-mm-yyyy'), 'donor asked', 67);
+insert into MAINTENANCE (maintenanceid, maintenancedate, description, itemid)
+values (415, to_date('07-07-2024', 'dd-mm-yyyy'), 'donor asked', 70);
+insert into MAINTENANCE (maintenanceid, maintenancedate, description, itemid)
 values (84, to_date('02-06-2024 11:28:20', 'dd-mm-yyyy hh24:mi:ss'), 'easy', 4);
 insert into MAINTENANCE (maintenanceid, maintenancedate, description, itemid)
 values (85, to_date('02-06-2024 11:28:20', 'dd-mm-yyyy hh24:mi:ss'), 'easy', 127);
@@ -2686,6 +2855,8 @@ insert into MAINTENANCE (maintenanceid, maintenancedate, description, itemid)
 values (103, to_date('02-06-2024 11:28:20', 'dd-mm-yyyy hh24:mi:ss'), 'difficult', 34);
 insert into MAINTENANCE (maintenanceid, maintenancedate, description, itemid)
 values (104, to_date('02-06-2024 11:28:20', 'dd-mm-yyyy hh24:mi:ss'), 'Need continue', 39);
+commit;
+prompt 400 records committed...
 insert into MAINTENANCE (maintenanceid, maintenancedate, description, itemid)
 values (105, to_date('02-06-2024 11:28:20', 'dd-mm-yyyy hh24:mi:ss'), 'easy', 4);
 insert into MAINTENANCE (maintenanceid, maintenancedate, description, itemid)
@@ -2734,8 +2905,6 @@ insert into MAINTENANCE (maintenanceid, maintenancedate, description, itemid)
 values (127, to_date('02-06-2024 11:28:20', 'dd-mm-yyyy hh24:mi:ss'), 'difficult', 59);
 insert into MAINTENANCE (maintenanceid, maintenancedate, description, itemid)
 values (128, to_date('02-06-2024 11:28:20', 'dd-mm-yyyy hh24:mi:ss'), 'difficult', 31);
-commit;
-prompt 400 records committed...
 insert into MAINTENANCE (maintenanceid, maintenancedate, description, itemid)
 values (129, to_date('02-06-2024 11:28:20', 'dd-mm-yyyy hh24:mi:ss'), 'Need continue', 78);
 insert into MAINTENANCE (maintenanceid, maintenancedate, description, itemid)
@@ -2759,814 +2928,814 @@ values (138, to_date('02-06-2024 11:28:20', 'dd-mm-yyyy hh24:mi:ss'), 'easy', 33
 insert into MAINTENANCE (maintenanceid, maintenancedate, description, itemid)
 values (139, to_date('02-06-2024 11:28:20', 'dd-mm-yyyy hh24:mi:ss'), 'easy', 52);
 commit;
-prompt 411 records loaded
+prompt 435 records loaded
 prompt Loading OPERATOR...
-insert into OPERATOR (operatorid, name, expirationdate)
-values (401, 'CrystalManning', to_date('02-08-2029', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (402, 'SaffronMurray', to_date('21-12-2024', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (403, 'NastassjaO''Neal', to_date('19-05-2026', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (404, 'DickKahn', to_date('23-10-2026', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (405, 'RhysDafoe', to_date('27-05-2025', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (406, 'HalleReid', to_date('15-11-2026', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (407, 'GatesElizondo', to_date('20-08-2027', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (408, 'WesKingsley', to_date('29-10-2027', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (409, 'FredaCheadle', to_date('25-11-2024', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (410, 'JoelyMcPherson', to_date('27-03-2026', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (411, 'KaronLavigne', to_date('13-09-2027', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (412, 'MichaelHeron', to_date('05-02-2028', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (413, 'PowersRock', to_date('22-05-2024', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (414, 'BradleyHeche', to_date('17-02-2029', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (415, 'BuffyUtada', to_date('20-08-2029', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (416, 'KingGoldwyn', to_date('20-04-2030', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (417, 'IsabellaO''Connor', to_date('16-08-2029', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (418, 'ElizabethVan Shelton', to_date('23-05-2028', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (419, 'DiamondDiehl', to_date('22-11-2027', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (420, 'FionaGlover', to_date('11-03-2028', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (421, 'WillLunch', to_date('21-10-2030', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (422, 'AdrienHumphrey', to_date('13-02-2028', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (423, 'DerrickLaw', to_date('01-03-2030', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (424, 'AlannahLeto', to_date('01-10-2025', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (425, 'HarryEstevez', to_date('10-01-2027', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (426, 'LaraWitt', to_date('04-10-2025', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (427, 'JodyParish', to_date('02-01-2029', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (428, 'BelindaRush', to_date('09-12-2025', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (429, 'MikeHirsch', to_date('18-03-2027', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (430, 'StephenAlston', to_date('25-07-2030', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (431, 'AndyDeVito', to_date('03-08-2029', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (432, 'IkeDiBiasio', to_date('07-11-2026', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (433, 'JavonThornton', to_date('30-04-2026', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (434, 'MarinaJovovich', to_date('02-02-2024', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (435, 'CoreyMorales', to_date('04-11-2024', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (436, 'AlbertGray', to_date('03-09-2029', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (437, 'LarenzFlanagan', to_date('18-06-2027', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (438, 'JessicaPigott-Smith', to_date('03-01-2029', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (439, 'AdinaRockwell', to_date('28-10-2027', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (440, 'HumbertoSevenfold', to_date('04-10-2029', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (441, 'RhysKaryo', to_date('28-12-2027', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (442, 'CledusHall', to_date('24-06-2027', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (443, 'LynetteBeals', to_date('15-01-2028', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (444, 'NedMcNeice', to_date('24-09-2026', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (445, 'DarrenDillon', to_date('17-12-2029', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (446, 'TerenceLachey', to_date('10-10-2024', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (447, 'DebraDrive', to_date('17-02-2027', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (448, 'JeremyMars', to_date('07-06-2028', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (449, 'TobeyDiCaprio', to_date('10-06-2024', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (450, 'NightPeet', to_date('06-12-2030', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (451, 'MikaMcKennitt', to_date('30-01-2024', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (452, 'GoldieProwse', to_date('11-02-2025', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (453, 'RoscoeDe Almeida', to_date('12-05-2027', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (454, 'VingHutch', to_date('22-08-2028', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (455, 'SethRed', to_date('14-11-2024', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (456, 'KimberlyThewlis', to_date('06-03-2024', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (457, 'HarrySledge', to_date('25-03-2029', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (458, 'GoranIsaacs', to_date('15-08-2025', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (459, 'TimothyHanley', to_date('10-04-2027', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (460, 'SimonKilmer', to_date('21-05-2027', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (461, 'JohnnieTheron', to_date('02-09-2030', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (462, 'VondieSchreiber', to_date('15-03-2025', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (463, 'MintSwayze', to_date('04-03-2024', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (464, 'RuebenJones', to_date('08-05-2030', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (465, 'BernieBerry', to_date('22-08-2029', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (466, 'AshleyJessee', to_date('07-11-2030', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (467, 'HarrisonBell', to_date('17-08-2028', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (468, 'LeonardoBacon', to_date('17-09-2027', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (469, 'AndrewBonham', to_date('08-11-2030', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (470, 'KimberlyThomas', to_date('28-11-2026', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (471, 'MatthewWard', to_date('20-07-2027', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (472, 'ChristopherFrampton', to_date('10-04-2030', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (473, 'GeraldineMacLachlan', to_date('18-09-2030', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (474, 'AidanMewes', to_date('09-09-2026', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (475, 'DiamondFishburne', to_date('15-09-2024', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (476, 'PeteAtkins', to_date('12-02-2025', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (477, 'NightBlack', to_date('23-10-2030', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (478, 'FreddyDriver', to_date('20-10-2028', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (479, 'LouiseClayton', to_date('15-06-2027', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (480, 'DaveyDiggs', to_date('28-04-2028', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (481, 'GarlandDonovan', to_date('26-09-2029', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (482, 'IsaiahPleasure', to_date('15-04-2025', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (483, 'AlanLiu', to_date('18-05-2029', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (484, 'DanielLoring', to_date('05-12-2024', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (485, 'WaymanRooker', to_date('01-11-2028', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (486, 'FrankieMilsap', to_date('09-12-2024', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (487, 'AimeeGambon', to_date('05-10-2028', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (488, 'LucindaAniston', to_date('17-03-2026', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (489, 'BradleyPressly', to_date('18-02-2026', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (490, 'LionelSpears', to_date('28-11-2028', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (491, 'IreneTippe', to_date('18-07-2026', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (492, 'GeraldineDanger', to_date('20-05-2028', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (493, 'DianeNewman', to_date('30-06-2030', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (494, 'DelroyElwes', to_date('27-06-2030', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (495, 'PattiSerbedzija', to_date('19-03-2026', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (496, 'PamelaSantana', to_date('06-06-2029', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (497, 'DianeDavid', to_date('03-11-2024', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (498, 'FayeHolbrook', to_date('13-08-2028', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (499, 'JonnyRippy', to_date('10-10-2024', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (343, 'SalmaShearer', to_date('16-02-2026', 'dd-mm-yyyy'));
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (401, 'CrystalManning', to_date('02-08-2029', 'dd-mm-yyyy'), '36 Josh Ave');
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (402, 'SaffronMurray', to_date('21-12-2024', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (403, 'NastassjaO''Neal', to_date('19-05-2026', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (404, 'DickKahn', to_date('23-10-2026', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (405, 'RhysDafoe', to_date('27-05-2025', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (406, 'HalleReid', to_date('15-11-2026', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (407, 'GatesElizondo', to_date('20-08-2027', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (408, 'WesKingsley', to_date('29-10-2027', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (409, 'FredaCheadle', to_date('25-11-2024', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (410, 'JoelyMcPherson', to_date('27-03-2026', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (411, 'KaronLavigne', to_date('13-09-2027', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (412, 'MichaelHeron', to_date('05-02-2028', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (413, 'PowersRock', to_date('22-05-2024', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (414, 'BradleyHeche', to_date('17-02-2029', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (415, 'BuffyUtada', to_date('20-08-2029', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (416, 'KingGoldwyn', to_date('20-04-2030', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (417, 'IsabellaO''Connor', to_date('16-08-2029', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (418, 'ElizabethVan Shelton', to_date('23-05-2028', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (419, 'DiamondDiehl', to_date('22-11-2027', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (420, 'FionaGlover', to_date('11-03-2028', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (421, 'WillLunch', to_date('21-10-2030', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (422, 'AdrienHumphrey', to_date('13-02-2028', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (423, 'DerrickLaw', to_date('01-03-2030', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (424, 'AlannahLeto', to_date('01-10-2025', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (425, 'HarryEstevez', to_date('10-01-2027', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (426, 'LaraWitt', to_date('04-10-2025', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (427, 'JodyParish', to_date('02-01-2029', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (428, 'BelindaRush', to_date('09-12-2025', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (429, 'MikeHirsch', to_date('18-03-2027', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (430, 'StephenAlston', to_date('25-07-2030', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (431, 'AndyDeVito', to_date('03-08-2029', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (432, 'IkeDiBiasio', to_date('07-11-2026', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (433, 'JavonThornton', to_date('30-04-2026', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (434, 'MarinaJovovich', to_date('02-02-2024', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (435, 'CoreyMorales', to_date('04-11-2024', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (436, 'AlbertGray', to_date('03-09-2029', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (437, 'LarenzFlanagan', to_date('18-06-2027', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (438, 'JessicaPigott-Smith', to_date('03-01-2029', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (439, 'AdinaRockwell', to_date('28-10-2027', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (440, 'HumbertoSevenfold', to_date('04-10-2029', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (441, 'RhysKaryo', to_date('28-12-2027', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (442, 'CledusHall', to_date('24-06-2027', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (443, 'LynetteBeals', to_date('15-01-2028', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (444, 'NedMcNeice', to_date('24-09-2026', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (445, 'DarrenDillon', to_date('17-12-2029', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (446, 'TerenceLachey', to_date('10-10-2024', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (447, 'DebraDrive', to_date('17-02-2027', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (448, 'JeremyMars', to_date('07-06-2028', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (449, 'TobeyDiCaprio', to_date('10-06-2024', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (450, 'NightPeet', to_date('06-12-2030', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (451, 'MikaMcKennitt', to_date('30-01-2024', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (452, 'GoldieProwse', to_date('11-02-2025', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (453, 'RoscoeDe Almeida', to_date('12-05-2027', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (454, 'VingHutch', to_date('22-08-2028', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (455, 'SethRed', to_date('14-11-2024', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (456, 'KimberlyThewlis', to_date('06-03-2024', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (457, 'HarrySledge', to_date('25-03-2029', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (458, 'GoranIsaacs', to_date('15-08-2025', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (459, 'TimothyHanley', to_date('10-04-2027', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (460, 'SimonKilmer', to_date('21-05-2027', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (461, 'JohnnieTheron', to_date('02-09-2030', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (462, 'VondieSchreiber', to_date('15-03-2025', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (463, 'MintSwayze', to_date('04-03-2024', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (464, 'RuebenJones', to_date('08-05-2030', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (465, 'BernieBerry', to_date('22-08-2029', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (466, 'AshleyJessee', to_date('07-11-2030', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (467, 'HarrisonBell', to_date('17-08-2028', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (468, 'LeonardoBacon', to_date('17-09-2027', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (469, 'AndrewBonham', to_date('08-11-2030', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (470, 'KimberlyThomas', to_date('28-11-2026', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (471, 'MatthewWard', to_date('20-07-2027', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (472, 'ChristopherFrampton', to_date('10-04-2030', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (473, 'GeraldineMacLachlan', to_date('18-09-2030', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (474, 'AidanMewes', to_date('09-09-2026', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (475, 'DiamondFishburne', to_date('15-09-2024', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (476, 'PeteAtkins', to_date('12-02-2025', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (477, 'NightBlack', to_date('23-10-2030', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (478, 'FreddyDriver', to_date('20-10-2028', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (479, 'LouiseClayton', to_date('15-06-2027', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (480, 'DaveyDiggs', to_date('28-04-2028', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (481, 'GarlandDonovan', to_date('26-09-2029', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (482, 'IsaiahPleasure', to_date('15-04-2025', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (483, 'AlanLiu', to_date('18-05-2029', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (484, 'DanielLoring', to_date('05-12-2024', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (485, 'WaymanRooker', to_date('01-11-2028', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (486, 'FrankieMilsap', to_date('09-12-2024', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (487, 'AimeeGambon', to_date('05-10-2028', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (488, 'LucindaAniston', to_date('17-03-2026', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (489, 'BradleyPressly', to_date('18-02-2026', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (490, 'LionelSpears', to_date('28-11-2028', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (491, 'IreneTippe', to_date('18-07-2026', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (492, 'GeraldineDanger', to_date('20-05-2028', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (493, 'DianeNewman', to_date('30-06-2030', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (494, 'DelroyElwes', to_date('27-06-2030', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (495, 'PattiSerbedzija', to_date('19-03-2026', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (496, 'PamelaSantana', to_date('06-06-2029', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (497, 'DianeDavid', to_date('03-11-2024', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (498, 'FayeHolbrook', to_date('13-08-2028', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (499, 'JonnyRippy', to_date('10-10-2024', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (343, 'SalmaShearer', to_date('16-02-2026', 'dd-mm-yyyy'), null);
 commit;
 prompt 100 records committed...
-insert into OPERATOR (operatorid, name, expirationdate)
-values (344, 'SteveColtrane', to_date('05-04-2027', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (345, 'JohnRush', to_date('23-01-2026', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (346, 'TarynMantegna', to_date('02-03-2025', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (347, 'RobertaHaslam', to_date('08-01-2028', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (348, 'MorrisMcCann', to_date('09-05-2030', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (349, 'MurrayShatner', to_date('28-04-2029', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (350, 'FionaDriver', to_date('19-01-2026', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (351, 'PenelopeAndrews', to_date('11-07-2027', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (352, 'MarieMcGriff', to_date('09-06-2024', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (353, 'SaulNelson', to_date('19-02-2028', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (354, 'ReneLewis', to_date('29-06-2028', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (355, 'TreatHagar', to_date('31-03-2029', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (356, 'BoTomei', to_date('09-02-2026', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (357, 'NedHeslov', to_date('22-03-2029', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (358, 'BrianWinter', to_date('24-11-2025', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (359, 'EmmylouChristie', to_date('08-05-2026', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (360, 'CliffBrolin', to_date('25-11-2026', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (361, 'StevieHoliday', to_date('07-03-2027', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (362, 'DenisArkenstone', to_date('23-09-2028', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (363, 'Mary BethPopper', to_date('14-10-2029', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (364, 'SteveCumming', to_date('17-02-2026', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (365, 'MadelineBarnett', to_date('25-02-2027', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (366, 'JaimeWakeling', to_date('13-09-2024', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (367, 'StevieJones', to_date('22-12-2025', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (368, 'CliffParm', to_date('16-05-2027', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (369, 'AngelaPride', to_date('01-02-2027', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (370, 'FairuzaPerrineau', to_date('14-03-2026', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (371, 'KevinShaye', to_date('19-01-2027', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (372, 'DarrenZeta-Jones', to_date('30-12-2030', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (373, 'ChakaWilder', to_date('18-01-2030', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (374, 'KatrinWithers', to_date('29-04-2028', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (375, 'BenicioCleary', to_date('24-08-2029', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (376, 'CrispinLynskey', to_date('26-01-2029', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (377, 'BalthazarRifkin', to_date('07-12-2025', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (378, 'JesseBirch', to_date('13-09-2024', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (379, 'BarryNeill', to_date('07-11-2028', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (380, 'MykeltiMoffat', to_date('21-07-2024', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (381, 'SuziRankin', to_date('06-08-2030', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (382, 'AlessandroOrbit', to_date('24-10-2026', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (383, 'GuyCampbell', to_date('16-10-2025', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (384, 'EmmMaxwell', to_date('16-07-2028', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (385, 'ReneeAmos', to_date('21-03-2027', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (386, 'LisaMraz', to_date('05-08-2027', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (387, 'OdedMoreno', to_date('12-12-2024', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (388, 'BobLangella', to_date('28-01-2026', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (389, 'LindaMifune', to_date('06-06-2027', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (390, 'HugoHolm', to_date('18-07-2026', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (391, 'EmmaPlatt', to_date('03-04-2026', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (392, 'EttaVannelli', to_date('05-09-2028', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (393, 'GwynethRundgren', to_date('07-07-2030', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (394, 'GloriaLarter', to_date('16-07-2025', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (395, 'ChuckBenson', to_date('24-06-2025', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (396, 'RufusLithgow', to_date('02-09-2025', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (397, 'ScarlettReid', to_date('30-09-2024', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (398, 'MichelleCrouch', to_date('13-02-2025', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (399, 'HazelWorrell', to_date('25-06-2024', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (400, 'WesPalmer', to_date('16-12-2025', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (100, 'MattCollie', to_date('13-11-2025', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (101, 'JulietPfeiffer', to_date('03-04-2030', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (102, 'ChristianMewes', to_date('22-12-2026', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (103, 'GlenTanon', to_date('06-07-2029', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (104, 'OwenLaPaglia', to_date('18-03-2028', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (105, 'IvanHatchet', to_date('31-01-2026', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (106, 'FranzHunter', to_date('26-05-2025', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (107, 'RobGaines', to_date('18-01-2025', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (108, 'HexFoxx', to_date('17-12-2029', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (109, 'AliciaWinstone', to_date('12-09-2027', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (110, 'PhilipBenson', to_date('09-12-2025', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (111, 'TziMcAnally', to_date('31-10-2028', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (112, 'MarleyBlossoms', to_date('15-03-2026', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (113, 'DaveBuffalo', to_date('24-02-2024', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (114, 'KirkCromwell', to_date('03-09-2030', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (115, 'MarlonSecada', to_date('28-10-2026', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (116, 'MaxDiBiasio', to_date('18-02-2029', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (117, 'CevinBachman', to_date('03-03-2029', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (118, 'MekhiCantrell', to_date('04-04-2025', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (119, 'HarryBrando', to_date('04-06-2025', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (120, 'HarrisonMcPherson', to_date('15-04-2029', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (121, 'LupeRebhorn', to_date('05-12-2030', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (122, 'YolandaJeffreys', to_date('05-07-2027', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (123, 'RadeLogue', to_date('08-01-2030', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (124, 'JuliannePride', to_date('06-01-2030', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (125, 'NikSchwarzenegger', to_date('28-03-2027', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (126, 'HarrisVai', to_date('03-08-2027', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (127, 'ClaireGibson', to_date('09-02-2024', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (128, 'PragaLevin', to_date('31-01-2025', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (129, 'YaphetTierney', to_date('16-12-2025', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (130, 'KathleenBranch', to_date('26-05-2026', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (131, 'ReneeKlugh', to_date('10-03-2029', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (132, 'ChristopherGill', to_date('29-09-2028', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (133, 'TchekyTolkan', to_date('21-03-2025', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (134, 'RachidNeil', to_date('02-07-2030', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (135, 'LenaDaniels', to_date('05-06-2026', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (136, 'EddieCulkin', to_date('16-08-2024', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (137, 'HollandWahlberg', to_date('28-08-2024', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (138, 'AliciaShand', to_date('24-09-2024', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (139, 'ClayTurner', to_date('02-08-2026', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (140, 'JeffreyScorsese', to_date('02-05-2030', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (141, 'BethRicci', to_date('26-10-2029', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (142, 'LucyCoburn', to_date('01-05-2029', 'dd-mm-yyyy'));
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (344, 'SteveColtrane', to_date('05-04-2027', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (345, 'JohnRush', to_date('23-01-2026', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (346, 'TarynMantegna', to_date('02-03-2025', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (347, 'RobertaHaslam', to_date('08-01-2028', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (348, 'MorrisMcCann', to_date('09-05-2030', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (349, 'MurrayShatner', to_date('28-04-2029', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (350, 'FionaDriver', to_date('19-01-2026', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (351, 'PenelopeAndrews', to_date('11-07-2027', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (352, 'MarieMcGriff', to_date('09-06-2024', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (353, 'SaulNelson', to_date('19-02-2028', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (354, 'ReneLewis', to_date('29-06-2028', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (355, 'TreatHagar', to_date('31-03-2029', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (356, 'BoTomei', to_date('09-02-2026', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (357, 'NedHeslov', to_date('22-03-2029', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (358, 'BrianWinter', to_date('24-11-2025', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (359, 'EmmylouChristie', to_date('08-05-2026', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (360, 'CliffBrolin', to_date('25-11-2026', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (361, 'StevieHoliday', to_date('07-03-2027', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (362, 'DenisArkenstone', to_date('23-09-2028', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (363, 'Mary BethPopper', to_date('14-10-2029', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (364, 'SteveCumming', to_date('17-02-2026', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (365, 'MadelineBarnett', to_date('25-02-2027', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (366, 'JaimeWakeling', to_date('13-09-2024', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (367, 'StevieJones', to_date('22-12-2025', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (368, 'CliffParm', to_date('16-05-2027', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (369, 'AngelaPride', to_date('01-02-2027', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (370, 'FairuzaPerrineau', to_date('14-03-2026', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (371, 'KevinShaye', to_date('19-01-2027', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (372, 'DarrenZeta-Jones', to_date('30-12-2030', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (373, 'ChakaWilder', to_date('18-01-2030', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (374, 'KatrinWithers', to_date('29-04-2028', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (375, 'BenicioCleary', to_date('24-08-2029', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (376, 'CrispinLynskey', to_date('26-01-2029', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (377, 'BalthazarRifkin', to_date('07-12-2025', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (378, 'JesseBirch', to_date('13-09-2024', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (379, 'BarryNeill', to_date('07-11-2028', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (380, 'MykeltiMoffat', to_date('21-07-2024', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (381, 'SuziRankin', to_date('06-08-2030', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (382, 'AlessandroOrbit', to_date('24-10-2026', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (383, 'GuyCampbell', to_date('16-10-2025', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (384, 'EmmMaxwell', to_date('16-07-2028', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (385, 'ReneeAmos', to_date('21-03-2027', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (386, 'LisaMraz', to_date('05-08-2027', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (387, 'OdedMoreno', to_date('12-12-2024', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (388, 'BobLangella', to_date('28-01-2026', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (389, 'LindaMifune', to_date('06-06-2027', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (390, 'HugoHolm', to_date('18-07-2026', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (391, 'EmmaPlatt', to_date('03-04-2026', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (392, 'EttaVannelli', to_date('05-09-2028', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (393, 'GwynethRundgren', to_date('07-07-2030', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (394, 'GloriaLarter', to_date('16-07-2025', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (395, 'ChuckBenson', to_date('24-06-2025', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (396, 'RufusLithgow', to_date('02-09-2025', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (397, 'ScarlettReid', to_date('30-09-2024', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (398, 'MichelleCrouch', to_date('13-02-2025', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (399, 'HazelWorrell', to_date('25-06-2024', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (400, 'WesPalmer', to_date('16-12-2025', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (100, 'MattCollie', to_date('13-11-2025', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (101, 'JulietPfeiffer', to_date('03-04-2030', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (102, 'ChristianMewes', to_date('22-12-2026', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (103, 'GlenTanon', to_date('06-07-2029', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (104, 'OwenLaPaglia', to_date('18-03-2028', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (105, 'IvanHatchet', to_date('31-01-2026', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (106, 'FranzHunter', to_date('26-05-2025', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (107, 'RobGaines', to_date('18-01-2025', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (108, 'HexFoxx', to_date('17-12-2029', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (109, 'AliciaWinstone', to_date('12-09-2027', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (110, 'PhilipBenson', to_date('09-12-2025', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (111, 'TziMcAnally', to_date('31-10-2028', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (112, 'MarleyBlossoms', to_date('15-03-2026', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (113, 'DaveBuffalo', to_date('24-02-2024', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (114, 'KirkCromwell', to_date('03-09-2030', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (115, 'MarlonSecada', to_date('28-10-2026', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (116, 'MaxDiBiasio', to_date('18-02-2029', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (117, 'CevinBachman', to_date('03-03-2029', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (118, 'MekhiCantrell', to_date('04-04-2025', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (119, 'HarryBrando', to_date('04-06-2025', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (120, 'HarrisonMcPherson', to_date('15-04-2029', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (121, 'LupeRebhorn', to_date('05-12-2030', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (122, 'YolandaJeffreys', to_date('05-07-2027', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (123, 'RadeLogue', to_date('08-01-2030', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (124, 'JuliannePride', to_date('06-01-2030', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (125, 'NikSchwarzenegger', to_date('28-03-2027', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (126, 'HarrisVai', to_date('03-08-2027', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (127, 'ClaireGibson', to_date('09-02-2024', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (128, 'PragaLevin', to_date('31-01-2025', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (129, 'YaphetTierney', to_date('16-12-2025', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (130, 'KathleenBranch', to_date('26-05-2026', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (131, 'ReneeKlugh', to_date('10-03-2029', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (132, 'ChristopherGill', to_date('29-09-2028', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (133, 'TchekyTolkan', to_date('21-03-2025', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (134, 'RachidNeil', to_date('02-07-2030', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (135, 'LenaDaniels', to_date('05-06-2026', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (136, 'EddieCulkin', to_date('16-08-2024', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (137, 'HollandWahlberg', to_date('28-08-2024', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (138, 'AliciaShand', to_date('24-09-2024', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (139, 'ClayTurner', to_date('02-08-2026', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (140, 'JeffreyScorsese', to_date('02-05-2030', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (141, 'BethRicci', to_date('26-10-2029', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (142, 'LucyCoburn', to_date('01-05-2029', 'dd-mm-yyyy'), null);
 commit;
 prompt 200 records committed...
-insert into OPERATOR (operatorid, name, expirationdate)
-values (143, 'JoelyPresley', to_date('07-11-2030', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (144, 'DesmondNuman', to_date('30-07-2028', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (145, 'ChristineGarza', to_date('10-06-2027', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (146, 'HeathHatchet', to_date('18-03-2028', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (147, 'MurrayWhitley', to_date('25-07-2025', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (148, 'TimHeald', to_date('28-03-2028', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (149, 'BrentMueller-Stahl', to_date('15-03-2030', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (150, 'MollyGraham', to_date('22-09-2025', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (151, 'MiaMac', to_date('13-11-2029', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (152, 'RoyCash', to_date('27-08-2030', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (153, 'LauraSepulveda', to_date('02-04-2025', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (154, 'ConnieFuray', to_date('07-01-2029', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (155, 'NicoleMacy', to_date('01-12-2027', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (156, 'DarrenHeslov', to_date('06-02-2028', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (157, 'HectorJackson', to_date('01-07-2026', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (158, 'DebraStarr', to_date('17-11-2027', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (159, 'SharonStills', to_date('17-01-2025', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (160, 'OwenWhite', to_date('11-03-2030', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (161, 'LydiaGriggs', to_date('17-07-2026', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (162, 'ChadFinn', to_date('14-08-2024', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (163, 'PatriciaMoffat', to_date('20-02-2028', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (164, 'NicolePostlethwaite', to_date('07-09-2024', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (165, 'HarveyHayek', to_date('25-09-2030', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (166, 'KeithKapanka', to_date('09-06-2028', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (167, 'AustinLewis', to_date('07-01-2025', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (168, 'PatrickGeldof', to_date('10-12-2025', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (169, 'RandallWillis', to_date('03-09-2028', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (170, 'LiamBalk', to_date('15-04-2028', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (171, 'SigourneyPenders', to_date('23-08-2025', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (172, 'JackHeston', to_date('01-01-2030', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (173, 'MillaHayek', to_date('23-03-2026', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (174, 'SharonAli', to_date('21-02-2030', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (175, 'NigelHeslov', to_date('03-06-2026', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (176, 'CharltonCronin', to_date('13-01-2026', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (177, 'AndieDukakis', to_date('11-10-2024', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (178, 'GarryRhodes', to_date('23-04-2029', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (179, 'HarryRaybon', to_date('27-11-2026', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (180, 'Jean-ClaudeGuzman', to_date('14-08-2026', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (181, 'MaggieGalecki', to_date('23-05-2025', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (182, 'VictorVaughan', to_date('30-01-2028', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (183, 'CarrieFlanagan', to_date('29-09-2026', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (184, 'TommyCraddock', to_date('16-02-2025', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (185, 'KurtSpector', to_date('12-01-2025', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (244, 'BelindaDonovan', to_date('14-08-2027', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (245, 'GoldieSteagall', to_date('12-12-2024', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (246, 'SelmaMatarazzo', to_date('09-06-2030', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (247, 'JoshCarrack', to_date('01-04-2029', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (248, 'AzucarDiffie', to_date('13-09-2030', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (249, 'PhilipBarrymore', to_date('30-12-2030', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (250, 'AnneGiamatti', to_date('24-08-2027', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (251, 'AniShand', to_date('27-03-2024', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (252, 'RitaHayes', to_date('04-04-2026', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (253, 'ElvisCurry', to_date('10-07-2028', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (254, 'EmilyMarsden', to_date('09-12-2030', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (255, 'RyanMaxwell', to_date('28-02-2026', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (256, 'CornellVan Der Beek', to_date('29-12-2026', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (257, 'MaeWeisz', to_date('16-09-2027', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (258, 'BlairEstevez', to_date('10-10-2024', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (259, 'TraceSpader', to_date('07-06-2029', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (260, 'YaphetO''Neal', to_date('03-11-2028', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (261, 'OlympiaWilson', to_date('01-08-2030', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (262, 'PaulaHong', to_date('17-03-2024', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (263, 'WhoopiLowe', to_date('31-12-2026', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (264, 'FirstWhitford', to_date('25-02-2029', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (265, 'AdinaO''Keefe', to_date('09-04-2030', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (266, 'LynetteCollins', to_date('18-08-2027', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (267, 'WallyMoss', to_date('13-01-2028', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (268, 'JulietBuscemi', to_date('07-03-2024', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (269, 'JesusPonce', to_date('31-10-2027', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (270, 'SpikeFlemyng', to_date('16-06-2029', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (271, 'TeenaFoxx', to_date('19-12-2025', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (272, 'NicholasCash', to_date('04-07-2030', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (273, 'BeverleyHamilton', to_date('09-07-2030', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (274, 'EmmaBrooke', to_date('12-07-2026', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (275, 'TedFranks', to_date('05-12-2024', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (276, 'AliLarter', to_date('27-12-2029', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (277, 'MindyGaynor', to_date('07-01-2025', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (278, 'MichaelRundgren', to_date('06-06-2030', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (279, 'LouNivola', to_date('20-08-2024', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (280, 'AliChesnutt', to_date('19-05-2026', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (281, 'DebiMorse', to_date('29-11-2025', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (282, 'JaimeStiers', to_date('24-12-2029', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (283, 'RobertCole', to_date('17-04-2026', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (284, 'ElvisRuiz', to_date('22-08-2025', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (285, 'AllanViterelli', to_date('18-06-2028', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (286, 'MykeltiMcCracken', to_date('20-08-2024', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (287, 'CarlosMartin', to_date('02-01-2026', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (288, 'WalterHyde', to_date('13-09-2026', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (289, 'ArturoCurry', to_date('04-07-2025', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (290, 'BuddyGarr', to_date('03-07-2027', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (291, 'JosephPurefoy', to_date('05-11-2026', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (292, 'SamuelNuman', to_date('05-02-2027', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (293, 'BurtonHouston', to_date('21-12-2025', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (294, 'TyroneWood', to_date('06-04-2029', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (295, 'AdamLeguizamo', to_date('25-06-2025', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (296, 'ThinVincent', to_date('11-10-2028', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (297, 'AhmadWheel', to_date('14-05-2028', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (298, 'TeenaEsposito', to_date('21-02-2028', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (299, 'WillHoly', to_date('26-01-2029', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (300, 'TerriCash', to_date('13-01-2024', 'dd-mm-yyyy'));
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (143, 'JoelyPresley', to_date('07-11-2030', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (144, 'DesmondNuman', to_date('30-07-2028', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (145, 'ChristineGarza', to_date('10-06-2027', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (146, 'HeathHatchet', to_date('18-03-2028', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (147, 'MurrayWhitley', to_date('25-07-2025', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (148, 'TimHeald', to_date('28-03-2028', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (149, 'BrentMueller-Stahl', to_date('15-03-2030', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (150, 'MollyGraham', to_date('22-09-2025', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (151, 'MiaMac', to_date('13-11-2029', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (152, 'RoyCash', to_date('27-08-2030', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (153, 'LauraSepulveda', to_date('02-04-2025', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (154, 'ConnieFuray', to_date('07-01-2029', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (155, 'NicoleMacy', to_date('01-12-2027', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (156, 'DarrenHeslov', to_date('06-02-2028', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (157, 'HectorJackson', to_date('01-07-2026', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (158, 'DebraStarr', to_date('17-11-2027', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (159, 'SharonStills', to_date('17-01-2025', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (160, 'OwenWhite', to_date('11-03-2030', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (161, 'LydiaGriggs', to_date('17-07-2026', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (162, 'ChadFinn', to_date('14-08-2024', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (163, 'PatriciaMoffat', to_date('20-02-2028', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (164, 'NicolePostlethwaite', to_date('07-09-2024', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (165, 'HarveyHayek', to_date('25-09-2030', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (166, 'KeithKapanka', to_date('09-06-2028', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (167, 'AustinLewis', to_date('07-01-2025', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (168, 'PatrickGeldof', to_date('10-12-2025', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (169, 'RandallWillis', to_date('03-09-2028', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (170, 'LiamBalk', to_date('15-04-2028', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (171, 'SigourneyPenders', to_date('23-08-2025', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (172, 'JackHeston', to_date('01-01-2030', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (173, 'MillaHayek', to_date('23-03-2026', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (174, 'SharonAli', to_date('21-02-2030', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (175, 'NigelHeslov', to_date('03-06-2026', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (176, 'CharltonCronin', to_date('13-01-2026', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (177, 'AndieDukakis', to_date('11-10-2024', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (178, 'GarryRhodes', to_date('23-04-2029', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (179, 'HarryRaybon', to_date('27-11-2026', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (180, 'Jean-ClaudeGuzman', to_date('14-08-2026', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (181, 'MaggieGalecki', to_date('23-05-2025', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (182, 'VictorVaughan', to_date('30-01-2028', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (183, 'CarrieFlanagan', to_date('29-09-2026', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (184, 'TommyCraddock', to_date('16-02-2025', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (185, 'KurtSpector', to_date('12-01-2025', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (244, 'BelindaDonovan', to_date('14-08-2027', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (245, 'GoldieSteagall', to_date('12-12-2024', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (246, 'SelmaMatarazzo', to_date('09-06-2030', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (247, 'JoshCarrack', to_date('01-04-2029', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (248, 'AzucarDiffie', to_date('13-09-2030', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (249, 'PhilipBarrymore', to_date('30-12-2030', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (250, 'AnneGiamatti', to_date('24-08-2027', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (251, 'AniShand', to_date('27-03-2024', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (252, 'RitaHayes', to_date('04-04-2026', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (253, 'ElvisCurry', to_date('10-07-2028', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (254, 'EmilyMarsden', to_date('09-12-2030', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (255, 'RyanMaxwell', to_date('28-02-2026', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (256, 'CornellVan Der Beek', to_date('29-12-2026', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (257, 'MaeWeisz', to_date('16-09-2027', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (258, 'BlairEstevez', to_date('10-10-2024', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (259, 'TraceSpader', to_date('07-06-2029', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (260, 'YaphetO''Neal', to_date('03-11-2028', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (261, 'OlympiaWilson', to_date('01-08-2030', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (262, 'PaulaHong', to_date('17-03-2024', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (263, 'WhoopiLowe', to_date('31-12-2026', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (264, 'FirstWhitford', to_date('25-02-2029', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (265, 'AdinaO''Keefe', to_date('09-04-2030', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (266, 'LynetteCollins', to_date('18-08-2027', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (267, 'WallyMoss', to_date('13-01-2028', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (268, 'JulietBuscemi', to_date('07-03-2024', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (269, 'JesusPonce', to_date('31-10-2027', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (270, 'SpikeFlemyng', to_date('16-06-2029', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (271, 'TeenaFoxx', to_date('19-12-2025', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (272, 'NicholasCash', to_date('04-07-2030', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (273, 'BeverleyHamilton', to_date('09-07-2030', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (274, 'EmmaBrooke', to_date('12-07-2026', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (275, 'TedFranks', to_date('05-12-2024', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (276, 'AliLarter', to_date('27-12-2029', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (277, 'MindyGaynor', to_date('07-01-2025', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (278, 'MichaelRundgren', to_date('06-06-2030', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (279, 'LouNivola', to_date('20-08-2024', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (280, 'AliChesnutt', to_date('19-05-2026', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (281, 'DebiMorse', to_date('29-11-2025', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (282, 'JaimeStiers', to_date('24-12-2029', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (283, 'RobertCole', to_date('17-04-2026', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (284, 'ElvisRuiz', to_date('22-08-2025', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (285, 'AllanViterelli', to_date('18-06-2028', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (286, 'MykeltiMcCracken', to_date('20-08-2024', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (287, 'CarlosMartin', to_date('02-01-2026', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (288, 'WalterHyde', to_date('13-09-2026', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (289, 'ArturoCurry', to_date('04-07-2025', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (290, 'BuddyGarr', to_date('03-07-2027', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (291, 'JosephPurefoy', to_date('05-11-2026', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (292, 'SamuelNuman', to_date('05-02-2027', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (293, 'BurtonHouston', to_date('21-12-2025', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (294, 'TyroneWood', to_date('06-04-2029', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (295, 'AdamLeguizamo', to_date('25-06-2025', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (296, 'ThinVincent', to_date('11-10-2028', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (297, 'AhmadWheel', to_date('14-05-2028', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (298, 'TeenaEsposito', to_date('21-02-2028', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (299, 'WillHoly', to_date('26-01-2029', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (300, 'TerriCash', to_date('13-01-2024', 'dd-mm-yyyy'), null);
 commit;
 prompt 300 records committed...
-insert into OPERATOR (operatorid, name, expirationdate)
-values (301, 'LeonardoWarburton', to_date('28-03-2030', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (302, 'PowersRibisi', to_date('16-10-2029', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (303, 'HalSandler', to_date('25-10-2026', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (304, 'DennyArden', to_date('09-04-2027', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (305, 'IkeHauer', to_date('03-06-2030', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (306, 'NataschaUnion', to_date('01-09-2027', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (307, 'DomingoHagar', to_date('12-05-2024', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (308, 'RosannaDorn', to_date('26-02-2024', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (309, 'MurrayClinton', to_date('24-08-2024', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (310, 'AprilNeeson', to_date('15-04-2025', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (311, 'HexHatosy', to_date('17-12-2026', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (312, 'JulianneHedaya', to_date('29-04-2026', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (313, 'CurtisAtlas', to_date('28-09-2024', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (314, 'RupertTah', to_date('18-06-2030', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (315, 'MartyMitra', to_date('01-02-2027', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (316, 'GranRispoli', to_date('06-09-2029', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (317, 'NedEnglish', to_date('17-07-2028', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (318, 'AlbertinaHenstridge', to_date('19-05-2030', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (319, 'MichaelWillard', to_date('17-11-2025', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (320, 'JulietteColeman', to_date('13-12-2025', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (321, 'ChubbyPleasure', to_date('08-04-2030', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (322, 'RandySimpson', to_date('11-02-2028', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (323, 'MiaMarie', to_date('22-08-2028', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (324, 'YaphetWeaving', to_date('20-01-2030', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (325, 'JulianneWhitmore', to_date('01-12-2029', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (326, 'AdinaKeitel', to_date('12-12-2026', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (327, 'MinnieGoodall', to_date('13-04-2026', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (328, 'AzucarSpeaks', to_date('05-07-2024', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (329, 'PeaboMarsden', to_date('24-12-2029', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (330, 'RobMcGinley', to_date('24-08-2025', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (331, 'ReneSaucedo', to_date('19-05-2025', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (332, 'RhettKirkwood', to_date('15-10-2024', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (333, 'WangAndrews', to_date('15-07-2030', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (334, 'RandallBroderick', to_date('13-06-2026', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (335, 'HoraceCherry', to_date('21-04-2030', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (336, 'MirandaMarie', to_date('17-06-2030', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (337, 'HarryTanon', to_date('26-06-2028', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (338, 'DorryStrong', to_date('02-07-2024', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (339, 'DebraCusack', to_date('13-07-2029', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (340, 'CubaEnglish', to_date('16-07-2027', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (341, 'WallySlater', to_date('07-07-2028', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (342, 'AmandaCalle', to_date('28-12-2025', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (186, 'AndreaCraig', to_date('12-11-2028', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (187, 'GeenaGilley', to_date('19-07-2030', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (188, 'GailardBrooke', to_date('27-02-2028', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (189, 'LesleyBullock', to_date('05-01-2030', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (190, 'JerryEvans', to_date('10-09-2025', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (191, 'TildaWaits', to_date('24-02-2027', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (192, 'PattyParsons', to_date('04-10-2025', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (193, 'SineadNicholas', to_date('26-05-2029', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (194, 'LeslieCurry', to_date('10-08-2025', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (195, 'GailardCook', to_date('11-05-2030', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (196, 'DomingoImbruglia', to_date('21-12-2029', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (197, 'MiaMargulies', to_date('07-12-2026', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (198, 'SalGriffiths', to_date('09-06-2028', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (199, 'JoaquinHagerty', to_date('14-03-2025', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (200, 'NinaSepulveda', to_date('11-11-2026', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (201, 'StephenSanchez', to_date('12-10-2028', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (202, 'SolomonVanian', to_date('05-12-2027', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (203, 'DanielShaw', to_date('01-04-2029', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (204, 'VerticalKapanka', to_date('17-01-2025', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (205, 'BuffyCampbell', to_date('01-03-2026', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (206, 'RitaTennison', to_date('28-02-2029', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (207, 'HarrietPayne', to_date('16-07-2025', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (208, 'CarleneO''Hara', to_date('30-06-2028', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (209, 'AliMcCormack', to_date('12-08-2027', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (210, 'ChristineKaryo', to_date('25-11-2029', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (211, 'ThinStarr', to_date('27-02-2029', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (212, 'LiamGyllenhaal', to_date('08-01-2029', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (213, 'ColeFonda', to_date('23-06-2029', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (214, 'MiaRodriguez', to_date('13-02-2027', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (215, 'DebbieBancroft', to_date('07-07-2026', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (216, 'RheaHawn', to_date('28-09-2024', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (217, 'ElizaBosco', to_date('27-11-2024', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (218, 'GabrielClinton', to_date('07-12-2027', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (219, 'HollyFrakes', to_date('18-11-2024', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (220, 'CesarKramer', to_date('21-06-2030', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (221, 'LisaBlossoms', to_date('28-05-2027', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (222, 'DiamondGyllenhaal', to_date('19-09-2024', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (223, 'CarlWilliams', to_date('19-09-2024', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (224, 'GlenMatheson', to_date('19-10-2026', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (225, 'MintMills', to_date('23-09-2030', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (226, 'MirandaKingsley', to_date('27-01-2029', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (227, 'JoanHaggard', to_date('03-11-2029', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (228, 'CaroleEmmerich', to_date('26-04-2027', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (229, 'KathleenTillis', to_date('06-09-2024', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (230, 'CeiliHimmelman', to_date('12-12-2029', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (231, 'JosephBeckinsale', to_date('25-06-2030', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (232, 'GeggyKadison', to_date('03-04-2025', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (233, 'GilBadalucco', to_date('09-02-2027', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (234, 'BridgetteGold', to_date('21-01-2030', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (235, 'SonaIsaak', to_date('17-10-2028', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (236, 'LeaKlugh', to_date('19-06-2030', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (237, 'DorryRipley', to_date('15-02-2024', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (238, 'BradleyHaslam', to_date('22-06-2029', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (239, 'ReneSingh', to_date('25-04-2024', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (240, 'YolandaHawthorne', to_date('25-07-2024', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (241, 'CarlosSinatra', to_date('21-05-2027', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (242, 'JacksonConnick', to_date('18-12-2029', 'dd-mm-yyyy'));
-insert into OPERATOR (operatorid, name, expirationdate)
-values (243, 'JeanneLemmon', to_date('28-06-2025', 'dd-mm-yyyy'));
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (301, 'LeonardoWarburton', to_date('28-03-2030', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (302, 'PowersRibisi', to_date('16-10-2029', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (303, 'HalSandler', to_date('25-10-2026', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (304, 'DennyArden', to_date('09-04-2027', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (305, 'IkeHauer', to_date('03-06-2030', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (306, 'NataschaUnion', to_date('01-09-2027', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (307, 'DomingoHagar', to_date('12-05-2024', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (308, 'RosannaDorn', to_date('26-02-2024', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (309, 'MurrayClinton', to_date('24-08-2024', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (310, 'AprilNeeson', to_date('15-04-2025', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (311, 'HexHatosy', to_date('17-12-2026', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (312, 'JulianneHedaya', to_date('29-04-2026', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (313, 'CurtisAtlas', to_date('28-09-2024', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (314, 'RupertTah', to_date('18-06-2030', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (315, 'MartyMitra', to_date('01-02-2027', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (316, 'GranRispoli', to_date('06-09-2029', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (317, 'NedEnglish', to_date('17-07-2028', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (318, 'AlbertinaHenstridge', to_date('19-05-2030', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (319, 'MichaelWillard', to_date('17-11-2025', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (320, 'JulietteColeman', to_date('13-12-2025', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (321, 'ChubbyPleasure', to_date('08-04-2030', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (322, 'RandySimpson', to_date('11-02-2028', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (323, 'MiaMarie', to_date('22-08-2028', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (324, 'YaphetWeaving', to_date('20-01-2030', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (325, 'JulianneWhitmore', to_date('01-12-2029', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (326, 'AdinaKeitel', to_date('12-12-2026', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (327, 'MinnieGoodall', to_date('13-04-2026', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (328, 'AzucarSpeaks', to_date('05-07-2024', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (329, 'PeaboMarsden', to_date('24-12-2029', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (330, 'RobMcGinley', to_date('24-08-2025', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (331, 'ReneSaucedo', to_date('19-05-2025', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (332, 'RhettKirkwood', to_date('15-10-2024', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (333, 'WangAndrews', to_date('15-07-2030', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (334, 'RandallBroderick', to_date('13-06-2026', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (335, 'HoraceCherry', to_date('21-04-2030', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (336, 'MirandaMarie', to_date('17-06-2030', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (337, 'HarryTanon', to_date('26-06-2028', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (338, 'DorryStrong', to_date('02-07-2024', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (339, 'DebraCusack', to_date('13-07-2029', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (340, 'CubaEnglish', to_date('16-07-2027', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (341, 'WallySlater', to_date('07-07-2028', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (342, 'AmandaCalle', to_date('28-12-2025', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (186, 'AndreaCraig', to_date('12-11-2028', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (187, 'GeenaGilley', to_date('19-07-2030', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (188, 'GailardBrooke', to_date('27-02-2028', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (189, 'LesleyBullock', to_date('05-01-2030', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (190, 'JerryEvans', to_date('10-09-2025', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (191, 'TildaWaits', to_date('24-02-2027', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (192, 'PattyParsons', to_date('04-10-2025', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (193, 'SineadNicholas', to_date('26-05-2029', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (194, 'LeslieCurry', to_date('10-08-2025', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (195, 'GailardCook', to_date('11-05-2030', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (196, 'DomingoImbruglia', to_date('21-12-2029', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (197, 'MiaMargulies', to_date('07-12-2026', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (198, 'SalGriffiths', to_date('09-06-2028', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (199, 'JoaquinHagerty', to_date('14-03-2025', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (200, 'NinaSepulveda', to_date('11-11-2026', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (201, 'StephenSanchez', to_date('12-10-2028', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (202, 'SolomonVanian', to_date('05-12-2027', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (203, 'DanielShaw', to_date('01-04-2029', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (204, 'VerticalKapanka', to_date('17-01-2025', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (205, 'BuffyCampbell', to_date('01-03-2026', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (206, 'RitaTennison', to_date('28-02-2029', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (207, 'HarrietPayne', to_date('16-07-2025', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (208, 'CarleneO''Hara', to_date('30-06-2028', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (209, 'AliMcCormack', to_date('12-08-2027', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (210, 'ChristineKaryo', to_date('25-11-2029', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (211, 'ThinStarr', to_date('27-02-2029', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (212, 'LiamGyllenhaal', to_date('08-01-2029', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (213, 'ColeFonda', to_date('23-06-2029', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (214, 'MiaRodriguez', to_date('13-02-2027', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (215, 'DebbieBancroft', to_date('07-07-2026', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (216, 'RheaHawn', to_date('28-09-2024', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (217, 'ElizaBosco', to_date('27-11-2024', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (218, 'GabrielClinton', to_date('07-12-2027', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (219, 'HollyFrakes', to_date('18-11-2024', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (220, 'CesarKramer', to_date('21-06-2030', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (221, 'LisaBlossoms', to_date('28-05-2027', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (222, 'DiamondGyllenhaal', to_date('19-09-2024', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (223, 'CarlWilliams', to_date('19-09-2024', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (224, 'GlenMatheson', to_date('19-10-2026', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (225, 'MintMills', to_date('23-09-2030', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (226, 'MirandaKingsley', to_date('27-01-2029', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (227, 'JoanHaggard', to_date('03-11-2029', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (228, 'CaroleEmmerich', to_date('26-04-2027', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (229, 'KathleenTillis', to_date('06-09-2024', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (230, 'CeiliHimmelman', to_date('12-12-2029', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (231, 'JosephBeckinsale', to_date('25-06-2030', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (232, 'GeggyKadison', to_date('03-04-2025', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (233, 'GilBadalucco', to_date('09-02-2027', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (234, 'BridgetteGold', to_date('21-01-2030', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (235, 'SonaIsaak', to_date('17-10-2028', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (236, 'LeaKlugh', to_date('19-06-2030', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (237, 'DorryRipley', to_date('15-02-2024', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (238, 'BradleyHaslam', to_date('22-06-2029', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (239, 'ReneSingh', to_date('25-04-2024', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (240, 'YolandaHawthorne', to_date('25-07-2024', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (241, 'CarlosSinatra', to_date('21-05-2027', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (242, 'JacksonConnick', to_date('18-12-2029', 'dd-mm-yyyy'), null);
+insert into OPERATOR (operatorid, name, expirationdate, adress)
+values (243, 'JeanneLemmon', to_date('28-06-2025', 'dd-mm-yyyy'), null);
 commit;
 prompt 400 records loaded
 prompt Loading OPERATION...
@@ -4373,11 +4542,15 @@ values (125, 429);
 insert into OPERATION (itemid, operatorid)
 values (127, 117);
 insert into OPERATION (itemid, operatorid)
+values (128, 100);
+insert into OPERATION (itemid, operatorid)
 values (128, 221);
+commit;
+prompt 400 records committed...
 insert into OPERATION (itemid, operatorid)
 values (128, 224);
 commit;
-prompt 400 records loaded
+prompt 401 records loaded
 prompt Enabling foreign key constraints for ITEM...
 alter table ITEM enable constraint SYS_C00717208;
 prompt Enabling foreign key constraints for DONATION...
@@ -4404,3 +4577,7 @@ prompt Enabling triggers for OPERATOR...
 alter table OPERATOR enable all triggers;
 prompt Enabling triggers for OPERATION...
 alter table OPERATION enable all triggers;
+
+set feedback on
+set define on
+prompt Done
