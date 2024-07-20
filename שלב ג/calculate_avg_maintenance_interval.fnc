@@ -1,8 +1,9 @@
 --Calculate Average Maintenance Interval for an Item
 --This function calculates the average interval (in days) between maintenance dates for a given item.
+--This help to find an item with a lot of maintenances and then
+--the manager decide if throw it away.
 
-
-CREATE OR REPLACE FUNCTION calculate_avg_maintenance_interval(item_id IN INT) 
+CREATE OR REPLACE FUNCTION avg_maintenance_interval(item_id IN INT) 
 RETURN NUMBER 
 IS
     TYPE date_tab IS TABLE OF DATE;
@@ -30,4 +31,3 @@ EXCEPTION
     WHEN OTHERS THEN
         RETURN -1;
 END;
-/
