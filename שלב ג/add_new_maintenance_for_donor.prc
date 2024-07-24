@@ -36,10 +36,11 @@ BEGIN
     -- Commit the transaction
     COMMIT;
 
-    DBMS_OUTPUT.PUT_LINE('New maintenance records added successfully for donor ID ' || donor_id);
+    DBMS_OUTPUT.PUT_LINE('New maintenance records added successfully for donor ID: ' || donor_id);
 EXCEPTION
     WHEN OTHERS THEN
         -- Handle any other exceptions that may occur
         DBMS_OUTPUT.PUT_LINE('An error occurred: ' || SQLERRM);
         ROLLBACK;
 END;
+/
