@@ -1,5 +1,5 @@
 prompt PL/SQL Developer Export Tables for user EFROTH@LABDBWIN
-prompt Created by efroth on Χ™Χ•ΧΒ Χ—ΧΧ™Χ©Χ™ 18 Χ™Χ•ΧΧ™ 2024
+prompt Created by efroth on ιεν ηξιωι 18 ιεμι 2024
 set feedback off
 set define off
 

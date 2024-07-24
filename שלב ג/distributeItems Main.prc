@@ -1,6 +1,7 @@
 -- Main program for: Procedure to calculate and update location capacity and then distribute items.
 CREATE OR REPLACE PROCEDURE Main_distribution
-DECLARE
+IS
+--DECLARE
     v_total_quantity NUMBER;
 
 BEGIN
