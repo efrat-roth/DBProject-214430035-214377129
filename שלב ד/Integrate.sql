@@ -10,12 +10,30 @@ DROP COLUMN e_name;
 -- Step 2: Add foreign key constraint to Equipment table referencing Item table
 ALTER TABLE Equipment
 ADD CONSTRAINT fk_equipment_item
-FOREIGN KEY (ItemID)
+FOREIGN KEY (Item_ID)
 REFERENCES Item(ItemID);
 
 -- Step 3: Drop existing primary key constraint
+
+-- Step 3: Drop existing primary key constraint
+--מחיקת מפתח זר ב-uses
+ALTER TABLE uses
+DROP CONSTRAINT SYS_C00725912;
+
+--מחיקת מפתח ראשי ב-uses
+ALTER TABLE uses
+DROP CONSTRAINT SYS_C00725910
+
 ALTER TABLE Equipment
-DROP CONSTRAINT Equipment_pk;
+DROP CONSTRAINT SYS_C00725901;
+
+-- Step 4: Add new primary key constraint that includes ItemID and e_id
+
+ALTER TABLE Equipment
+ADD CONSTRAINT Equipment_pk
+PRIMARY KEY (Item_ID, e_id);
+
+
 
 -- Step 4: Add new primary key constraint that includes ItemID and e_id
 ALTER TABLE Equipment
@@ -55,12 +73,12 @@ ALTER TABLE Room
 DROP COLUMN r_location;
 
 ALTER TABLE room
-ADD LocationID NUMBER;
+ADD PHONEnUMBER NUMBER;
 
 -- Adding the foreign key constraint to link room to Location
 ALTER TABLE room
 ADD CONSTRAINT fk_room_location
-FOREIGN KEY (LocationID) REFERENCES Location(LocationID);
+FOREIGN KEY (PHONEnUMBER) REFERENCES Location(PHONEnUMBER);
 
 
 --כל Operator יוכל להשתתף בקורסים
@@ -70,8 +88,9 @@ CREATE TABLE OperatorCourse (
     g_id NUMBER,
     PRIMARY KEY (OperatorID, g_id),
     FOREIGN KEY (OperatorID) REFERENCES Operator(OperatorID),
-    FOREIGN KEY (g_id) REFERENCES studentGroup(g_id)
+    FOREIGN KEY (g_id) REFERENCES studentsGroup(g_id)
 );
+
 
 
 
